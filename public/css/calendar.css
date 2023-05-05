@@ -1,0 +1,23 @@
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.month-container {
+    border-collapse: collapse;
+}
+
+.month-container table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+}
+
+.month-container td,
+.month-container th {
+    border: 1px solid #ccc;
+    padding: 5px;
+}
