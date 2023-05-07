@@ -8,7 +8,7 @@ abstract class DAL
 
     public function __construct()
     {
-        $dsn = 'mysql:host=localhost;dbname=agenda_db;';
+        $dsn = 'mysql:host=localhost;dbname=DavidBotton;';
         $username = 'root';
         $password = '1225';
 
