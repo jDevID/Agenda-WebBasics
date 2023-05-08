@@ -1,7 +1,5 @@
 <?php
-
 require_once('../models/init.php');
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -15,5 +13,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     require('../views/register_view.php');
 }
-
 ?>
