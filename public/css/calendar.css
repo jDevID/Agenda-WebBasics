@@ -1,10 +1,50 @@
-.calendar-container {
+body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 100%;
 }
+
+.calendar-container {
+    width: 100%;
+    max-width: 900px; /* Adjust this value to change the calendar's maximum size */
+    text-align: center;
+}
+
+.calendar-controls {
+    margin-top: 10px;
+}
+
+.content {
+    flex-direction: row;
+    max-width: 1400px; /* Adjust this value to change the content's maximum size */
+}
+
+.left-column {
+    flex: 1;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+.right-column {
+    flex: 1;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+#rendezvousList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#rendezvousList li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f0ad4e;
+    border-radius: 5px;
+}
+
+
 
 .month-container {
     border-collapse: collapse;
@@ -20,4 +60,29 @@
 .month-container th {
     border: 1px solid #ccc;
     padding: 5px;
+}
+
+.selected-day {
+    background-color: purple;
+    color: white;
+}
+
+/*
+Gestion rendez vous
+*/
+.rendezvous-form {
+    margin: 20px 0;
+}
+
+.rendezvous-form label,
+.rendezvous-form input,
+.rendezvous-form textarea {
+    display: block;
+    margin: 5px 0;
+}
+
+.rendezvous-form textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
 }
