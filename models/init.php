@@ -1,9 +1,8 @@
 <?php
-
 # Charge les classes PHP quand nécessaire
 function load($class){
-    $pathModels = '../models/' . $class . '.class.php';
-    $pathDAL = '../data/' .$class . '.class.php';
+    $pathModels = __DIR__ . '/' . $class . '.class.php';
+    $pathDAL = __DIR__ . '/../data/' .$class . '.class.php';
     if(file_exists($pathModels)){
         require_once($pathModels);
     }
@@ -11,9 +10,7 @@ function load($class){
         require_once($pathDAL);
     }
 }
-
 # inscrire load() en tant que fonction auto-loading
 spl_autoload_register("load");
 
 ?>
-
