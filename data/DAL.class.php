@@ -5,7 +5,6 @@ abstract class DAL
     # (prepared statements et placeholders contre SQLi)
     protected PDO $conn;
 
-
     public function __construct()
     {
         $dsn = 'mysql:host=localhost;dbname=DavidBotton;';
@@ -20,4 +19,3 @@ abstract class DAL
         }
     }
 }
-?>
