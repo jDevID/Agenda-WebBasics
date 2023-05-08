@@ -1,12 +1,8 @@
 <?php
-session_start();
-require_once('../models/init.php');
+require_once 'session_check.php';
+require_once '../models/Rendezvous.class.php';
 
-if (!isset($_SESSION['username'])) {
-    header('Location: login.php');
-    exit();
-}
-
-
+$rendezvous = new Rendezvous();
+$data = $rendezvous->getAllRendezvous();
 
 require('../views/list_appointments_view.php');
