@@ -35,19 +35,9 @@ class Rendezvous extends DAL {
         return true;
     }
 
-    public function getRendezvousById($id): array {
-        $sql = "SELECT * FROM rendezvous WHERE id = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
     public function saveRendezvous($name, $description, $date, $start_hour, $end_hour, $user_id): bool {
 
-
-            $sql = "INSERT INTO rendezvous (user_id, name, description, date, start_hour, end_hour) VALUES (:user_id, :name, :description, :date, :start_hour, :end_hour)";
-
+        $sql = "INSERT INTO rendezvous (user_id, name, description, date, start_hour, end_hour) VALUES (:user_id, :name, :description, :date, :start_hour, :end_hour)";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -60,7 +50,6 @@ class Rendezvous extends DAL {
             ':end_hour' => $end_hour
         ];
 
-
         if (!$stmt->execute($params)) {
 
             echo "Error: " . implode(" - ", $stmt->errorInfo());
@@ -69,8 +58,7 @@ class Rendezvous extends DAL {
         return true;
     }
 
-    public function getRendezvousData($year, $month)
-    {
+    public function getRendezvousData($year, $month) {
         $query = "SELECT * FROM rendezvous WHERE YEAR(date) = :year AND MONTH(date) = :month";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':year', $year, PDO::PARAM_INT);
@@ -79,19 +67,4 @@ class Rendezvous extends DAL {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function getAllRendezvous(): array
-    {
-        $sql = "SELECT * FROM rendezvous ORDER BY date, start_hour";
-        $result = $this->conn->query($sql);
-
-        $data = [];
-
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
 }
