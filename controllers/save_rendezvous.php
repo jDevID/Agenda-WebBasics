@@ -17,7 +17,7 @@ $form_data = extract_form_data($fields);
 $user_id = $_SESSION['user_id'];
 $id = $_POST['id'] ?? null;
 
-file_put_contents(__DIR__ . '/../debug/debug.txt', print_r($_POST, true));
+file_put_contents(__DIR__ . '/debug/debug.txt', print_r($_POST, true));
 // Instance de RDV et set des attributs
 $rendezvous = new Rendezvous();
 //$result = $rendezvous->saveRendezvous($name, $description, $date, $start_hour, $end_hour, $user_id);
@@ -61,8 +61,7 @@ if (!validate_hour_range($form_data['start_hour'], $form_data['end_hour'])) {
 // Envoyer la réponse au format Json
 header('Content-Type: application/json');
 
-$result = $rendezvous->saveRendezvous($form_data['name'], $form_data['description'], $form_data['date'], $form_data['start_hour'], $form_data['end_hour'], $user_id);
-ob_end_clean();
+$result = $rendezvous->saveRendezvous($form_data['name'], $form_data['description'], $form_data['date'], $form_data['start_hour'], $form_data['end_hour'], $user_id);ob_end_clean();
 if ($result) {
     // Clean output buffer before sending the JSON response
     echo json_encode(['status' => 'success']);
