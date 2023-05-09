@@ -1,5 +1,5 @@
 <?php
-// ob_start(); // https://www.php.net/manual/en/function.ob-start.php
+session_start();
 require_once('../models/init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -15,11 +15,11 @@ else {
     if ($result) {
         session_start();
         $_SESSION['username'] = $result['username'];
-        header('Location: ./list_appointments.php');
+        $_SESSION['user_id'] = $result['id'];
+        header('Location: ../views/list_appointments_view.php');
         exit();
     } else {
         // si le log-in fails, redirection
         require('../views/login_view.php');
     }
 }
-// ob_end_flush();
