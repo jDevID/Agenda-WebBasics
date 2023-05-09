@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../public/css/calendar.css">
     <!-- JQuery librairie Js, permet la manipulation aisée de documents HTML -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="../public/js/calendar.js"></script> <!-- le script js pour l'affichage du calendrier -->
 </head>
 
 <!-- Contrôles du calendrier -->
@@ -49,7 +48,7 @@
                 <button type="button" id="deleteBtn">Supprimer</button>
                 <button type="button" id="congeBtn">Congé</button>
             </form>
-            <div id="formError" class="alert alert-danger" ></div>
+            <div id="formError" class="alert alert-danger"></div>
         </div>
     </div>
 
@@ -65,9 +64,43 @@
 AJAX pour gérer la sauvegarde de RDV en DB  !
 -->
 <script>
+    function loadRendezvousList() {
+        $.ajax({
+            type: 'GET',
+            url: '../controllers/getList_rendezvous.php',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    const rendezvousList = response.data;
+                    $('#rendezvousList').empty(); // Clear the list before appending new items
+
+                    rendezvousList.forEach(function (rendezvous) {
+                        // Create a list item for each rendezvous and append it to the rendezvous list
+                        const listItem = $('<li>')
+                            .text(rendezvous.name + ' - ' + rendezvous.date + ' - ' + rendezvous.start_hour + ' - ' + rendezvous.end_hour)
+                            .data('rendezvous', rendezvous)  // set le data du rdv a chaque item
+                            .appendTo('#rendezvousList');
+                    });
+                } else {
+                    console.error('Error occurred while fetching rendezvous list:', response.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error occurred while fetching rendezvous list:', textStatus, errorThrown);
+            }
+        });
+    }
 
     $(document).ready(function () {
         const calendar = new Calendar("calendar", "rendezvousFormElem");
+        loadRendezvousList(); // Load the rendezvous list when the page is loaded
+
+        $('#rendezvousList').on('click', 'li', function () {
+            const rendezvousData = $(this).data('rendezvous');
+            calendar.fillFormFields(new Date(rendezvousData.date), rendezvousData);
+            $('#action').val('update');
+            $('#id').val(rendezvousData.id);
+        });
 
         function showError(message) {
             $('#formError').text(message).show();
@@ -93,27 +126,20 @@ AJAX pour gérer la sauvegarde de RDV en DB  !
                     if (response.status === 'success') {
                         console.log('Rendez-vous sauvé:', response);
                         calendar.clearFormInputs(); // Clear the form inputs after successful save
-                        // Reload the rendezvous list after a successful save/update/delete
-                        calendar.reloadRendezvousList();
+                        loadRendezvousList(); // Reload the rendezvous list after a successful save/update/delete
                     } else {
                         showError(response.message);
                     }
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error('Il y a eu un problème lors de la sauvegarde du Rendez-vous:', textStatus, errorThrown);
-                }
+
             });
         });
-
-
-        $(document).on('click', '.delete-button', function () {
-            const rendezvousId = $(this).data('id');
+        $('#deleteBtn').on('click', function () {
             $('#action').val('delete');
-            $('#id').val(rendezvousId); // Set the hidden input field value to the rendezvous id
+            $('#rendezvousFormElem').submit();
         });
-
     });
 </script>
-
+<script src="../public/js/calendar.js"></script> <!-- le script js pour l'affichage du calendrier -->
 </body>
 </html>
