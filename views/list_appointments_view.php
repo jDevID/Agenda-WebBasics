@@ -57,7 +57,6 @@
     <div class="right-column">
         <h2>Liste des rendez-vous</h2>
         <ul id="rendezvousList"></ul>
-        <script src="../public/js/getRendezvousList.js"></script>
     </div>
 
 </div>
