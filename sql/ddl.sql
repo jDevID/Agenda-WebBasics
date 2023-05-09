@@ -1,5 +1,8 @@
-# linux install :   $  mysql -u root -p < ddl.sql
-# ou bien passer par phpmyadmin
+# mysql -u root -p < ddl.sql
+
+# InnoDB permet Transactions
+# supporte contraintes de foreign key
+# meilleure perf + respect ACID
 
 CREATE DATABASE IF NOT EXISTS DavidBotton;
 USE DavidBotton;
@@ -8,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS rendezvous (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -19,4 +22,4 @@ CREATE TABLE IF NOT EXISTS rendezvous (
     start_hour TIME NOT NULL,
     end_hour TIME NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
-);
+) ENGINE=InnoDB;
