@@ -1,35 +1,50 @@
 body {
+    font-family: Arial, sans-serif;
+}
+
+#calendarContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-}
-
-.calendar-container {
-    width: 100%;
-    max-width: 900px; /* Adjust this value to change the calendar's maximum size */
-    text-align: center;
+    margin-bottom: 2rem;
 }
 
 .calendar-controls {
-    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1rem;
 }
 
 .content {
-    flex-direction: row;
-    max-width: 1400px; /* Adjust this value to change the content's maximum size */
+    display: flex;
+    justify-content: space-around;
+    max-width: 1400px;
+        margin: 0 auto;
 }
 
-.left-column {
-    flex: 1;
-    padding-right: 20px;
-    box-sizing: border-box;
-}
-
+.left-column,
 .right-column {
-    flex: 1;
-    padding-left: 20px;
-    box-sizing: border-box;
+    width: 45%;
+}
+
+#rendezvousForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#rendezvousForm label,
+#rendezvousForm input,
+#rendezvousForm textarea {
+    margin: 0.5rem 0;
+}
+
+#rendezvousForm button {
+    margin: 1rem 0;
+}
+
+#formError {
+    display: none;
 }
 
 #rendezvousList {
@@ -38,28 +53,36 @@ body {
 }
 
 #rendezvousList li {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #f0ad4e;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
 }
 
-
-
-.month-container {
-    border-collapse: collapse;
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    padding: 8px 12px;
 }
 
+/* Calendar styles */
 .month-container table {
     border-collapse: collapse;
     width: 100%;
     text-align: center;
+        font-size: 1.5rem;
 }
 
 .month-container td,
 .month-container th {
     border: 1px solid #ccc;
-    padding: 5px;
+    padding: 10px;
 }
 
 .selected-day {
@@ -67,9 +90,29 @@ body {
     color: white;
 }
 
-/*
-Gestion rendez vous
-*/
+
+/* Separator line */
+.calendar-container::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 1rem 0;
+}
+
+.content::after {
+    content: "";
+    display: block;
+    width: 2px;
+    height: 100%;
+    background-color: #ccc;
+    position: absolute;
+    left: 50%;
+    margin: 1rem 0;
+}
+
+/* Rendezvous form styles */
 .rendezvous-form {
     margin: 20px 0;
 }
@@ -86,3 +129,13 @@ Gestion rendez vous
     height: 100px;
     resize: none;
 }
+/* not effective: align hours input oon a row*/
+/*.hour-inputs {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
+
+/*.hour-inputs label,*/
+/*.hour-inputs input {*/
+/*    display: inline;*/
+/*}*/
