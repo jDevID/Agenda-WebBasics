@@ -7,18 +7,16 @@
 *   -   clickVideClearInputs
 *
  */
-class Calendar {
+class Calendrier {
     constructor(containerId, listeRendezvous, formulaire) {
         this.calendrierId = containerId;
-        this.listeRendezvous = listeRendezvous;
         this.formulaire = formulaire;
-        this.year = new Date().getFullYear();
-        this.month = new Date().getMonth();
+        this.annee = new Date().getFullYear();
+        this.mois = new Date().getMonth();
     }
 
     // Assigne la liste de RDV et le formulaire au calendrier
     assignerDependances(listeRendezvous, formulaire) {
-        this.listeRendezvous = listeRendezvous;
         this.formulaire = formulaire;
     }
 
@@ -33,11 +31,11 @@ class Calendar {
                 day.classList.add("selected-day");
                 // on parse la date
                 const date = new Date(parseInt(day.dataset.year), parseInt(day.dataset.month), parseInt(day.dataset.day));
-                // on envoit aux inputs du formulaire
-                this.formulaire.fillFormFields(date, {
+                // on envoie aux inputs du formulaire
+                this.formulaire.RemplirInputsFormulaire(date, {
                     id: "",
                     name: "",
-                    description: `Rendez-vous du ${day.dataset.day} du ${date.getMonth()} ${date.getFullYear()}\n`,
+                    description: `Rendez-vous du ${day.dataset.day} du ${date.getMonth() + 1} ${date.getFullYear()}\n`,
                     start_hour: "08:00",
                     end_hour: "09:00"
                 });
@@ -51,7 +49,7 @@ class Calendar {
             // en cas de click en dehors des containers suivant :
             if (!event.target.closest("#calendar") && !event.target.closest("#rendezvousFormElem") && !event.target.closest("#rendezvousList") && !event.target.closest("#prevMonth") && !event.target.closest("#nextMonth")) {
                 // on vide les inputs du formulaire d'édition de RDV
-                this.formulaire.clearFormInputs();
+                this.formulaire.clearInputsFormulaire();
             }
         });
     }
@@ -62,19 +60,19 @@ class Calendar {
         const moisSuivant = document.getElementById("btn_moisSuivantId");
         // Assigné aux boutons correspondants
         moisPrecedent.addEventListener("click", () => {
-            this.month--;
-            if (this.month < 0) {
-                this.month = 11;
-                this.year--;
+            this.mois--;
+            if (this.mois < 0) {
+                this.mois = 11;
+                this.annee--;
             }
             // rebuild
             this.initCalendrier();
         });
         moisSuivant.addEventListener("click", () => {
-            this.month++;
-            if (this.month > 11) {
-                this.month = 0;
-                this.year++;
+            this.mois++;
+            if (this.mois > 11) {
+                this.mois = 0;
+                this.annee++;
             }
             this.initCalendrier();
         });
@@ -82,7 +80,7 @@ class Calendar {
 
     // Initialisation du calendrier et set des Actions ensuite
     initCalendrier() {
-        this.calendrierHTML = this.buildCalendrierHTML(this.year, this.month);
+        this.calendrierHTML = this.buildCalendrierHTML(this.annee, this.mois);
         document.getElementById(this.calendrierId).innerHTML = this.calendrierHTML;
         this.selectionJourCalendrier();
         this.clickVideClearInputs();
