@@ -71,7 +71,7 @@ body {
     padding: 8px 12px;
 }
 
-/* Calendar styles */
+/* Calendrier styles */
 .month-container table {
     border-collapse: collapse;
     width: 100%;
@@ -112,7 +112,7 @@ body {
     margin: 1rem 0;
 }
 
-/* Rendezvous form styles */
+/* Rendez-vous formulaire styles */
 .rendezvous-form {
     margin: 20px 0;
 }
@@ -129,13 +129,4 @@ body {
     height: 100px;
     resize: none;
 }
-/* not effective: align hours input oon a row*/
-/*.hour-inputs {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
 
-/*.hour-inputs label,*/
-/*.hour-inputs input {*/
-/*    display: inline;*/
-/*}*/
