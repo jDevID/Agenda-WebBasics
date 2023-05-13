@@ -15,6 +15,22 @@ body {
     width: 100%;
     margin-top: 1rem;
 }
+.rendezvous {
+    background-color: yellow;
+}
+
+.multiple-rendezvous {
+    background-color: orange;
+}
+
+.excessive-rendezvous {
+    background-color: red;
+}
+
+
+.holiday {
+    background-color: skyblue;
+}
 
 .content {
     display: flex;

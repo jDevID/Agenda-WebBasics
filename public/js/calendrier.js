@@ -15,6 +15,33 @@ class Calendrier {
         this.mois = new Date().getMonth();
     }
 
+    // Initialisation du calendrier et set des Actions ensuite
+    initCalendrier() {
+        console.log('calendrier.js/initCalendrier');
+        fetch('../../agendapp/controllers/crud_rendezvous.php?action=get_dates')
+        .then(response => response.json())
+            .then(data => {
+                let rendezvousDates = {};
+                // Check if data.data is an object
+                if (data && data.data && typeof data.data === 'object') {
+                    // Map the data to the correct format
+                }
+                    Object.entries(data.data).forEach(([dateStr, count]) => {
+                        let [year, month, day] = dateStr.split("-");
+                        rendezvousDates[`${day}-${month}-${year}`] = count;
+                    });
+
+                    console.log(rendezvousDates);
+                    this.calendrierHTML = this.buildCalendrierHTML(this.annee, this.mois, rendezvousDates);
+                    document.getElementById(this.calendrierId).innerHTML = this.calendrierHTML;
+                    this.selectionJourCalendrier();
+                    this.clickVideClearInputs();
+                })
+            .catch(error => {
+                    // Handle any errors from the fetch or processing steps
+                    console.error('Error fetching or processing data:', error);
+                });
+    }
     // Assigne la liste de RDV et le formulaire au calendrier
     assignerDependances(listeRendezvous, formulaire) {
         this.formulaire = formulaire;
@@ -118,8 +145,17 @@ class Calendrier {
                 if ((i === 0 && j < firstDay) || day > daysInMonth) {
                     calendarHTML += '<td></td>';
                 } else {
-                    // sinon on crée la structure on assignant les valeurs et le formattage de la date
-                    calendarHTML += `<td class="day" data-day="${day}" data-year="${year}" data-month="${month}" data-date="${day.toString().padStart(2, '0')}-${(month + 1).toString().padStart(2, '0')}-${year}">${day}</td>`;
+                    // Assigner une classe rdv day ou holiday à chaque cellule
+                    let currentDate = `${day.toString().padStart(2, '0')}-${(month + 1).toString().padStart(2, '0')}-${year}`;
+                    let additionalClass = '';
+                    if (rendezvousDates[currentDate] > 2) {
+                        additionalClass = ' excessive-rendezvous';
+                    } else if (rendezvousDates[currentDate] > 1) {
+                        additionalClass = ' multiple-rendezvous';
+                    } else if (rendezvousDates[currentDate] > 0){
+                        additionalClass = ' rendezvous';
+                    }
+                    calendarHTML += `<td class="day${additionalClass}" data-day="${day}" data-year="${year}" data-month="${month}" data-date="${day.toString().padStart(2, '0')}-${(month + 1).toString().padStart(2, '0')}-${year}">${day}</td>`;
                     day++;
                 }
             }
