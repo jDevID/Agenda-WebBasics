@@ -7,7 +7,8 @@
     <script src="../public/js/formulaire.js"></script>
     <script src="../public/js/listeRendezvous.js"></script>
     <script src="../public/js/calendrier.js"></script>
-    <link rel="stylesheet" href="../public/css/calendar.css">
+    <link rel="stylesheet" href="../public/css/calendrier.css">
+    <link rel="icon" href="../fav.ico" type="image/x-icon">
     <!-- JQuery librairie Js, permet la manipulation aisée de documents HTML -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>

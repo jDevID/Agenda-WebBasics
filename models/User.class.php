@@ -2,7 +2,7 @@
 require_once('../data/DAL.class.php');
 
 # usage des prepared statements de type PDOStatement - $stmt (contre SQLi)
-# pas de validation ni de sanitization d'input (rien contre XSS et CSRF)
+# pas de validation ni de sanitization d'input (rien contre XSS et SSRF)
 
 class User extends DAL # abstract DAL.class.php = héritage du PDO
 {

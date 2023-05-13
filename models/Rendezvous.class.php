@@ -51,7 +51,8 @@ class Rendezvous extends DAL
             ':date' => $date,
             ':start_hour' => $start_hour,
             ':end_hour' => $end_hour,
-            ':user_id' => $user_id
+            ':client_id' => $client_id,
+            ':user_id' => $user_id,
         ];
 
         return $this->executeRendezvousQuery($sql, $params);

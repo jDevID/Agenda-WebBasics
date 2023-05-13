@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <title>Register</title>
+    <link rel="icon" href="../fav.ico" type="image/x-icon">
 </head>
 <body>
 <h1>Register</h1>
