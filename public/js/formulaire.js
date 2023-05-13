@@ -28,8 +28,10 @@ class Formulaire {
                 url: '../controllers/crud_rendezvous.php',
                 data: formData,
                 success: function (data) {
-                    // check console du navigateur
-                    console.log(data);
+                    // Ajax étant asynchrone c'est à la suite qu'on refresh
+                    listeRendezvous.refreshRendezvousListe();
+                    calendar.initCalendrier();
+
                 },
                 error: function () {
                     console.error('There was a problem with the request');
@@ -43,16 +45,40 @@ class Formulaire {
             let action = idInput.val() ? 'update' : 'save';
             typeRequest.val(action);
             formulaire.trigger('submit');
-            // reload changements
-            listeRendezvous.reloadRendezvousList();
         });
         // Event Listener Bouton delete
         $('#deleteBtn').on('click', function (event) {
             event.preventDefault();
             typeRequest.val('delete');
             formulaire.trigger('submit');
-            listeRendezvous.reloadRendezvousList();
+        });
+        this.populateClientSelectBox();
+    }
+    populateClientSelectBox() {
+        let self = this;
+        $.ajax({
+            type: 'GET',
+            url: '../controllers/crud_client.php', // replace with your API endpoint for getting all clients
+            data: { action: 'list' },
+            dataType: 'json',
+            success: function (response) {
+                let select = $('#client');
+                for (let client of response.data) {
+                    // Display in the format 'client_id, client_name'
+                    select.append(new Option(client.id + ', ' + client.name, client.id));
+                }
 
+                // Add a change event listener to fill the name input with the selected client's name
+                select.change(function () {
+                    let selectedOption = $(this).find('option:selected').text();
+                    let clientName = selectedOption.split(', ')[1]; // get the client's name
+                    $('#name').val(clientName); // set the name input's value to the client's name
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error:', textStatus, errorThrown);
+                console.log(jqXHR.responseText);
+            }
         });
     }
 
@@ -94,11 +120,12 @@ class Formulaire {
     clearInputsFormulaire() {
         const form = document.getElementById(this.formId);
         // l'input id est hidden dans la vue
-        const inputs = form.querySelectorAll("input[type='id'],input[type='text'], input[type='date'], input[type='time'], textarea");
+        const inputs = form.querySelectorAll("input[type='id'],input[type='text'], input[type='date'], input[type='time'], textarea, select");
         inputs.forEach((input) => {
             // for each vider
             input.value = "";
         });
     }
+
 }
 
