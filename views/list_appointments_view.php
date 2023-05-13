@@ -74,20 +74,31 @@
     let listeRendezvous;
     // Assignation des classes aux id dans la vue
     document.addEventListener("DOMContentLoaded", function () {
-        // L'ordre a de l'importance selon les dépendances de chaque component
+        console.log('DOM Content Loaded');
+
         formulaire = new Formulaire("rendezvousFormElem");
+        console.log('Formulaire created');
+
         listeRendezvous = new ListeRendezvous("rendezvousList");
+        console.log('ListeRendezvous created');
+
         calendar = new Calendrier("calendar");
+        console.log('Calendrier created');
 
         listeRendezvous.assignerDependances(calendar, formulaire);
         calendar.assignerDependances(listeRendezvous, formulaire);
 
         formulaire.initialize();
+        console.log('Formulaire initialized');
         listeRendezvous.initialize();
+        console.log('ListeRendezvous initialized');
         listeRendezvous.refreshRendezvousListe();
+        console.log('ListeRendezvous refreshed');
 
         calendar.initCalendrier();
+        console.log('Calendrier initialized');
         calendar.cycleMoisAnnee();
+        console.log('Calendrier month/year cycled');
     });
 
 </script>

@@ -74,6 +74,7 @@ class Calendrier {
                     .then(data => {
                         if (data && data.status === 'success') {
                             this.listeRendezvous.updateRendezvousListe(data.data);
+                            console.log(data.data);
                         } else {
                             console.error('Error:', data.message);
                         }
