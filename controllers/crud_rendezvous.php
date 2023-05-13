@@ -34,6 +34,26 @@ function response($status, $message = '', $data = null)
 try {
     // Selon l'action du call, on détermine l'action voulue dans ce switch case
     switch ($action) {
+        // rdv by day
+        case 'day':
+            $date = $_GET['date'];
+            $rendezvousForDay = $rendezvous->getAllRendezvousForDay($date);
+            if ($rendezvousForDay) {
+                response('success', "crud_rendezvous.php/day -> liste RDV du $date reçue", $rendezvousForDay);
+            } else {
+                response('error', "Error -> no rendezvous for $date");
+            }
+            break;
+
+        // Date/count-of-rdv
+        case 'get_dates':
+            $rendezvousDates = $rendezvous->getCountRendezvousByDate();
+            if ($rendezvousDates) {
+                response('success', 'crud_rendezvous.php/get_dates -> rdv count by day', $rendezvousDates);
+            } else {
+                response('error', 'Error -> rendezvousDates n\'est pas un array');
+            }
+            break;
 
         case 'list':
             $year = $_GET['annee'] ?? date("Y");

@@ -44,6 +44,7 @@ class Calendrier {
     }
     // Assigne la liste de RDV et le formulaire au calendrier
     assignerDependances(listeRendezvous, formulaire) {
+        this.listeRendezvous = listeRendezvous;
         this.formulaire = formulaire;
     }
 
@@ -66,6 +67,20 @@ class Calendrier {
                     start_hour: "08:00",
                     end_hour: "09:00"
                 });
+                // Recevoir les rendez vous set sur une date spécifique
+                const dateStr = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.dataset.day.padStart(2, '0')}`;
+                fetch(`../../agendapp/controllers/crud_rendezvous.php?action=day&date=${dateStr}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.status === 'success') {
+                            this.listeRendezvous.updateRendezvousListe(data.data);
+                        } else {
+                            console.error('Error:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
             });
         });
     }
@@ -77,6 +92,8 @@ class Calendrier {
             if (!event.target.closest("#calendar") && !event.target.closest("#rendezvousFormElem") && !event.target.closest("#rendezvousList") && !event.target.closest("#prevMonth") && !event.target.closest("#nextMonth")) {
                 // on vide les inputs du formulaire d'édition de RDV
                 this.formulaire.clearInputsFormulaire();
+                this.clearSelectedDays();
+                this.listeRendezvous.refreshRendezvousListe();
             }
         });
     }
@@ -105,16 +122,8 @@ class Calendrier {
         });
     }
 
-    // Initialisation du calendrier et set des Actions ensuite
-    initCalendrier() {
-        this.calendrierHTML = this.buildCalendrierHTML(this.annee, this.mois);
-        document.getElementById(this.calendrierId).innerHTML = this.calendrierHTML;
-        this.selectionJourCalendrier();
-        this.clickVideClearInputs();
-    }
-
     // On génère les balises HTML du calendrier
-    buildCalendrierHTML(year, month) {
+    buildCalendrierHTML(year, month, rendezvousDates = []) {
         const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
         // Initialisation des conteneurs HTML

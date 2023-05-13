@@ -37,6 +37,25 @@ class Rendezvous extends DAL
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllRendezvousForDay($date): array
+    {
+        $query = "SELECT * FROM rendezvous WHERE date = :date ORDER BY start_hour";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':date', $date);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+        public
+    function getCountRendezvousByDate(): array
+    {
+        $query = "SELECT date, COUNT(*) as count FROM rendezvous GROUP BY date ORDER BY date";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        // fetchAll retourne un tableau de résultat
+        return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
     /** Créer un rendez-vous en DB
      * / @throws Exception
      */

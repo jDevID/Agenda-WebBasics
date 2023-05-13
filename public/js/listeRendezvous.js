@@ -59,14 +59,18 @@ class ListeRendezvous {
         let self = this;
         $.ajax({
             type: 'GET',
-            url: '../controllers/crud_rendezvous.php',
+            url: '../../agendapp/controllers/crud_rendezvous.php',
             data: {action: 'list'},
             dataType: 'json',
             success: function (response) {
                 if (response.status === 'success') {
-                     console.log(response)
-                     self.rendezvousData = response.data;
-                     self.creerListeElementHTML(response.data);
+                    console.log(response);
+                    if (Array.isArray(response.data)) {
+                        self.rendezvousData = response.data;
+                        self.creerListeElementHTML(response.data);
+                    } else {
+                        console.error('Error: rendezvousData is not an array');
+                    }
                 } else {
                     console.error('Error:', response.message);
                 }
@@ -78,5 +82,13 @@ class ListeRendezvous {
         });
     }
 
+    updateRendezvousListe(rendezvousData) {
+        if (Array.isArray(rendezvousData)) {
+            this.rendezvousData = rendezvousData;
+            this.creerListeElementHTML(rendezvousData);
+        } else {
+            console.error('Error: rendezvousData is not an array');
+        }
+    }
 
 }
