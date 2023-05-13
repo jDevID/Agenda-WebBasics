@@ -32,8 +32,9 @@
             <form id="rendezvousFormElem" action="../controllers/crud_rendezvous.php" method="post">
                 <input type="hidden" name="id" id="id">
                 <input type="hidden" name="action" id="action" value="save">
-                <label for="name">Nom:</label>
-                <input type="text" name="name" id="name" required minlength="3" maxlength="35">
+                <label for="client">Client:</label>
+                <select id="client" name="client" required></select>
+                <input type="hidden" name="name" id="name" required minlength="3" maxlength="35">
                 <br>
                 <label for="description">Description:</label>
                 <textarea name="description" id="description" required minlength="20" maxlength="300"></textarea>

@@ -95,6 +95,8 @@ class Formulaire {
         const formInputHeureFin = document.getElementById("end_hour");
         const formInputDescription = document.getElementById("description");
         const formInputSelectionJour = document.getElementById("selected_day");
+        const formInputClient = document.getElementById("client");
+
         // Insertion donnée
         if (formInputId) {
             formInputId.value = rendezvousData ? rendezvousData.id : "";
@@ -114,7 +116,12 @@ class Formulaire {
         if (formInputDescription) {
             formInputDescription.value = rendezvousData ? rendezvousData.description : "";
         }
+        if (formInputClient) {
+            formInputClient.value = rendezvousData ? rendezvousData.client_id : "";
+        }
+
     }
+
 
     // Methode utilitaire pour vider les inputs
     clearInputsFormulaire() {
