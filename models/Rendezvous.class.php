@@ -26,7 +26,6 @@ class Rendezvous extends DAL
         }
     }
 
-
     public
     function getAllRendezvousArray(): array
     {
@@ -60,10 +59,10 @@ class Rendezvous extends DAL
      * / @throws Exception
      */
     public
-    function creerRendezvous($name, $description, $date, $start_hour, $end_hour, $user_id): bool
+    function creerRendezvous($name, $description, $date, $start_hour, $end_hour, $client_id, $user_id): bool
     {
-        $sql = "INSERT INTO rendezvous (name, description, date, start_hour, end_hour, user_id) 
-                VALUES (:name, :description, :date, :start_hour, :end_hour, :user_id)";
+        $sql = "INSERT INTO rendezvous (name, description, date, start_hour, end_hour, client_id, user_id) 
+                VALUES (:name, :description, :date, :start_hour, :end_hour, :client_id, :user_id)";
         $params = [
             ':name' => $name,
             ':description' => $description,
@@ -82,18 +81,18 @@ class Rendezvous extends DAL
      * @throws Exception
      */
     public
-    function modifierRendezvousById($id, $name, $description, $date, $start_hour, $end_hour, $user_id): bool
-    {   // query SQL
-        $sql = "UPDATE rendezvous SET user_id = :user_id, name = :name, description = :description, date = :date, start_hour = :start_hour, end_hour = :end_hour WHERE id = :id";
-        // Remplissage des paramètres
+    function modifierRendezvousById($id, $name, $description, $date, $start_hour, $end_hour, $client_id, $user_id): bool
+    {
+        $sql = "UPDATE rendezvous SET name = :name, description = :description, date = :date, start_hour = :start_hour, end_hour = :end_hour, client_id = :client_id WHERE id = :id and user_id = :user_id";
         $params = [
             ':id' => $id,
-            ':user_id' => $user_id,
             ':name' => $name,
             ':description' => $description,
             ':date' => $date,
             ':start_hour' => $start_hour,
-            ':end_hour' => $end_hour
+            ':end_hour' => $end_hour,
+            ':client_id' => $client_id,
+            ':user_id' => $user_id,
         ];
         // Envoi à la fonction utilitaire
         return $this->executeRendezvousQuery($sql, $params);

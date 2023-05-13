@@ -48,9 +48,9 @@
                 <label for="date">Date:</label>
                 <input type="date" name="date" id="date" required>
                 <br>
-
+                <br>
                 <button type="submit" id="saveUpdateBtn" >Sauver</button>
-                <button type="button" id="deleteBtn">Supprimer</button>
+                <button type="button" id="deleteBtn">Annuler</button>
                 <button type="submit" id="congeBtn">Congé</button>
             </form>
             <div id="formError" class="alert alert-danger"></div>

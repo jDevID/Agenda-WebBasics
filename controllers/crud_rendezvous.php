@@ -1,15 +1,14 @@
 <?php
-// Service Rendez vous
-// Create Read Update Delete
+// Create Read Update Delete RDV
 require_once 'session_check.php';
 require_once '../models/Rendezvous.class.php';
 require_once '../validation/validator.php';
-require_once '../utils/form_data.php';
 
 // Afficher un rapport d'erreur (testing)
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 // Sauvegarde des paramètres action, cible et destinataire
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 $id = $_POST['id'] ?? null;
@@ -59,15 +58,15 @@ try {
             $year = $_GET['annee'] ?? date("Y");
             $month = $_GET['mois'] ?? date("m");
             $data = $rendezvous->getAllRendezvousArray();
-            response('success', '', $data);
+            response('success', 'crud_rendezvous.php/list -> liste RDV reçue', $data);
             break;
 
         case 'save':
-            $fields = ['name', 'description', 'date', 'start_hour', 'end_hour'];
+            $fields = ['name', 'description', 'date', 'start_hour', 'end_hour', 'client'];
             $form_data = extract_form_data($fields);
-            $result = $rendezvous->creerRendezvous($form_data['name'], $form_data['description'], $form_data['date'], $form_data['start_hour'], $form_data['end_hour'], $user_id);
+            $result = $rendezvous->creerRendezvous($form_data['name'], $form_data['description'], $form_data['date'], $form_data['start_hour'], $form_data['end_hour'], $form_data['client'], $user_id);
             if ($result) {
-                response('success', 'Rendezvous saved successfully');
+                response('success', 'crud_rendezvous.php/save -> RDV sauvé');
             } else {
                 response('error', 'Error saving rendezvous');
             }
@@ -75,11 +74,11 @@ try {
 
         case 'update':
             if (!is_null($id)) {
-                $fields = ['name', 'description', 'date', 'start_hour', 'end_hour'];
+                $fields = ['name', 'description', 'date', 'start_hour', 'end_hour', 'client'];
                 $form_data = extract_form_data($fields);
-                $result = $rendezvous->modifierRendezvousById($id, $form_data['name'], $form_data['description'], $form_data['date'], $form_data['start_hour'], $form_data['end_hour'], $user_id);
+                $result = $rendezvous->modifierRendezvousById($id, $form_data['name'], $form_data['description'], $form_data['date'], $form_data['start_hour'], $form_data['end_hour'], $form_data['client'], $user_id);
                 if ($result) {
-                    response('success', 'Rendezvous updated successfully');
+                    response('success', 'crud_rendezvous.php/update -> RDV updated');
                 } else {
                     response('error', 'Error updating rendezvous');
                 }
@@ -92,7 +91,7 @@ try {
             if (!is_null($id)) {
                 $result = $rendezvous->annulerRendezvousById($id);
                 if ($result) {
-                    response('success', 'Rendezvous deleted successfully');
+                    response('success', 'crud_rendezvous.php/delete -> RDV deleted');
                 } else {
                     response('error', 'Error deleting rendezvous');
                 }
@@ -102,10 +101,10 @@ try {
             break;
 
         default:
-            response('error', 'switch case crud RDV: Action invalide');
+            response('error', 'crud_rendezvous.php/default -> Action invalide');
             break;
     }
 } catch (Exception $e) {
-    response('error', 'An error occurred: ' . $e->getMessage());
+    response('error', 'crud_rendezvous.php/catch -> switch case Exception' . $e->getMessage());
 }
 ?>
