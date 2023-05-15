@@ -22,7 +22,10 @@ function response($status, $message = '', $data = null)
 {
     $logData = ['status' => $status, 'message' => $message, 'data' => $data];
     // Le serveur doit avoir rw autorisations  sur ../debug/ pour créer des logs
-    $logFile = fopen("../debug/crudRendezvous.log", "a");
+    $logFile = fopen("../debug/crudClient.log", "a");
+    if ($logFile === false) {
+        die("Error -> Permission read&write requises sur le contenu du dossier /debug");
+    }
     fwrite($logFile, json_encode($logData) . "\n");
     fclose($logFile);
 

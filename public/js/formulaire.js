@@ -5,9 +5,10 @@
  */
 class Formulaire {
     // Assigner sa place dans la vue
-    constructor(formId) {
+    constructor(formId, listeRendezvous) {
         this.formId = formId;
     }
+
     initialize() {
         // Déclarations des valeurs utiles
         let self = this;
@@ -39,7 +40,7 @@ class Formulaire {
             });
         });
         // Event Listener Bouton sauver qui a 2 utilités
-        $('#saveUpdateBtn').on('click', function (event) {
+        $('#saveUpdateBtn').off('click').on('click', function (event) {
             event.preventDefault();
             // valeur update (modifier) ou save (créer)
             let action = idInput.val() ? 'update' : 'save';
@@ -47,7 +48,7 @@ class Formulaire {
             formulaire.trigger('submit');
         });
         // Event Listener Bouton delete
-        $('#deleteBtn').on('click', function (event) {
+        $('#deleteBtn').off('click').on('click', function (event) {
             event.preventDefault();
             typeRequest.val('delete');
             formulaire.trigger('submit');
@@ -58,8 +59,8 @@ class Formulaire {
         let self = this;
         $.ajax({
             type: 'GET',
-            url: '../controllers/crud_client.php', // replace with your API endpoint for getting all clients
-            data: { action: 'list' },
+            url: '../controllers/client_crud.php', // replace with your API endpoint for getting all clients
+            data: {action: 'list'},
             dataType: 'json',
             success: function (response) {
                 let select = $('#client');
@@ -69,7 +70,7 @@ class Formulaire {
                 }
 
                 // Add a change event listener to fill the name input with the selected client's name
-                select.change(function () {
+                select.off('change').change(function () {
                     let selectedOption = $(this).find('option:selected').text();
                     let clientName = selectedOption.split(', ')[1]; // get the client's name
                     $('#name').val(clientName); // set the name input's value to the client's name

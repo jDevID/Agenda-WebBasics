@@ -69,12 +69,12 @@ class Calendrier {
                 });
                 // Recevoir les rendez vous set sur une date spécifique
                 const dateStr = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.dataset.day.padStart(2, '0')}`;
-                fetch(`../../agendapp/controllers/crud_rendezvous.php?action=day&date=${dateStr}`)
+                fetch(`../../agendapp/controllers/rendezvous_crud.php?action=day&date=${dateStr}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.status === 'success') {
                             this.listeRendezvous.updateRendezvousListe(data.data);
-                            console.log(data.data);
+                            //console.log(data.data);
                         } else {
                             console.error('Error:', data.message);
                         }
@@ -90,7 +90,8 @@ class Calendrier {
     clickVideClearInputs() {
         document.body.addEventListener("click", (event) => {
             // en cas de click en dehors des containers suivant :
-            if (!event.target.closest("#calendar") && !event.target.closest("#rendezvousFormElem") && !event.target.closest("#rendezvousList") && !event.target.closest("#prevMonth") && !event.target.closest("#nextMonth")) {
+            if (!event.target.closest("#calendar") && !event.target.closest("#rendezvousFormElem") && !event.target.closest("#rendezvousList") && !event.target.closest("#btn_moisPrecedentId") && !event.target.closest("#btn_moisSuivantId")) {
+                console.log('Click vide');
                 // on vide les inputs du formulaire d'édition de RDV
                 this.formulaire.clearInputsFormulaire();
                 this.clearSelectedDays();
@@ -110,7 +111,6 @@ class Calendrier {
                 this.mois = 11;
                 this.annee--;
             }
-            // rebuild
             this.initCalendrier();
         });
         moisSuivant.addEventListener("click", () => {
@@ -124,7 +124,10 @@ class Calendrier {
     }
 
     // On génère les balises HTML du calendrier
-    buildCalendrierHTML(year, month, rendezvousDates = []) {
+    buildCalendrierHTML(year, month, rendezvousDates = [], congeDates = []) {
+        console.log(rendezvousDates);
+        console.log(congeDates);
+
         const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
         // Initialisation des conteneurs HTML

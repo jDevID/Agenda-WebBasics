@@ -3,7 +3,13 @@ require_once '../data/DAL.class.php';
 
 class Rendezvous extends DAL
 { // Classe Rendez-vous hérite du PDO par la DAL
-
+    private string $name;
+    private string $description;
+    private string $date;
+    private string $start_hour;
+    private string $end_hour;
+    private int $client_id;
+    private int $user_id;
 
     /** Méthode utilitaire RDV
      * @throws Exception

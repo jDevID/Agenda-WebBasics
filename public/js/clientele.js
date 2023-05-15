@@ -26,7 +26,7 @@ class Clientele {
     refreshClientList() {
         $.ajax({
             type: 'GET',
-            url: '../controllers/crud_client.php?action=list',
+            url: '../../agendapp/controllers/client_crud.php?action=list',
             dataType: 'json',
             success: (response) => {
                 if (response.status === 'success') {
@@ -55,7 +55,7 @@ class Clientele {
 
         $.ajax({
             type: 'POST',
-            url: '../controllers/crud_client.php',
+            url: '../../agendapp/controllers/client_crud.php',
             data: {action: 'save', name: name, email: email},
             success: (response) => {
                 if (response.status === 'success') {
@@ -71,7 +71,7 @@ class Clientele {
     deleteClient() {
         $.ajax({
             type: 'POST',
-            url: '../controllers/crud_client.php',
+            url: '../../agendapp/controllers/client_crud.php',
             data: {action: 'delete', id: this.selectedClientId},
             dataType: 'json',
             success: (response) => {

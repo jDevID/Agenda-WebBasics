@@ -2,7 +2,7 @@
 // Create Read Update Delete RDV
 require_once 'session_check.php';
 require_once '../models/Rendezvous.class.php';
-require_once '../validation/validator.php';
+require_once '../validation/rendezvous_validator.php';
 
 // Afficher un rapport d'erreur (testing)
 ini_set('display_errors', 1);
@@ -21,7 +21,10 @@ function response($status, $message = '', $data = null)
 {
     $logData = ['status' => $status, 'message' => $message, 'data' => $data];
     // Le serveur doit avoir RW autorisation  sur ../debug/ pour créer des logs
-    $logFile = fopen("../debug/crudRendezvousLog.txt", "a");
+    $logFile = fopen("../debug/crudRendezvous.log", "a");
+    if ($logFile === false) {
+        die("Error -> Permission read&write requises sur le contenu du dossier /debug");
+    }
     fwrite($logFile, json_encode($logData) . "\n");
     fclose($logFile);
 
@@ -31,16 +34,16 @@ function response($status, $message = '', $data = null)
 }
 
 try {
-    // Selon l'action du call, on détermine l'action voulue dans ce switch case
+    // Selon l'action du paramètre, on détermine le traitement voulu
     switch ($action) {
         // rdv by day
         case 'day':
             $date = $_GET['date'];
             $rendezvousForDay = $rendezvous->getAllRendezvousForDay($date);
             if ($rendezvousForDay) {
-                response('success', "crud_rendezvous.php/day -> liste RDV du $date reçue", $rendezvousForDay);
+                response('success', "rendezvous_crud.php/day -> liste RDV du $date reçue", $rendezvousForDay);
             } else {
-                response('error', "Error -> no rendezvous for $date");
+                response('error', "Pas de rendez-vous à la date du $date");
             }
             break;
 
@@ -48,7 +51,7 @@ try {
         case 'get_dates':
             $rendezvousDates = $rendezvous->getCountRendezvousByDate();
             if ($rendezvousDates) {
-                response('success', 'crud_rendezvous.php/get_dates -> rdv count by day', $rendezvousDates);
+                response('success', 'rendezvous_crud.php/get_dates -> rdv count by day', $rendezvousDates);
             } else {
                 response('error', 'Error -> rendezvousDates n\'est pas un array');
             }
@@ -58,7 +61,7 @@ try {
             $year = $_GET['annee'] ?? date("Y");
             $month = $_GET['mois'] ?? date("m");
             $data = $rendezvous->getAllRendezvousArray();
-            response('success', 'crud_rendezvous.php/list -> liste RDV reçue', $data);
+            response('success', 'rendezvous_crud.php/list -> liste RDV reçue', $data);
             break;
 
         case 'save':
@@ -99,12 +102,8 @@ try {
                 response('error', 'No ID provided for delete');
             }
             break;
-
-        default:
-            response('error', 'crud_rendezvous.php/default -> Action invalide');
-            break;
     }
 } catch (Exception $e) {
-    response('error', 'crud_rendezvous.php/catch -> switch case Exception' . $e->getMessage());
+    response('error', 'rendezvous_crud.php/catch -> switch case Exception' . $e->getMessage());
 }
 ?>

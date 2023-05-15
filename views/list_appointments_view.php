@@ -29,7 +29,7 @@
         <div id="rendezvousForm" class="rendezvous-form">
             <h2>Edition Rendez-vous</h2>
 
-            <form id="rendezvousFormElem" action="../controllers/crud_rendezvous.php" method="post">
+            <form id="rendezvousFormElem" action="../controllers/rendezvous_crud.php" method="post">
                 <input type="hidden" name="id" id="id">
                 <input type="hidden" name="action" id="action" value="save">
                 <label for="client">Client:</label>
@@ -76,11 +76,11 @@
     document.addEventListener("DOMContentLoaded", function () {
         console.log('DOM Content Loaded');
 
-        formulaire = new Formulaire("rendezvousFormElem");
-        console.log('Formulaire created');
-
         listeRendezvous = new ListeRendezvous("rendezvousList");
         console.log('ListeRendezvous created');
+
+        formulaire = new Formulaire("rendezvousFormElem", listeRendezvous);
+        console.log('Formulaire created');
 
         calendar = new Calendrier("calendar");
         console.log('Calendrier created');

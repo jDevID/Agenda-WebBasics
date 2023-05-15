@@ -59,7 +59,7 @@ class ListeRendezvous {
         let self = this;
         $.ajax({
             type: 'GET',
-            url: '../../agendapp/controllers/crud_rendezvous.php',
+            url: '../../agendapp/controllers/rendezvous_crud.php',
             data: {action: 'list'},
             dataType: 'json',
             success: function (response) {
