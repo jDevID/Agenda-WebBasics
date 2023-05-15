@@ -17,31 +17,44 @@ class Calendrier {
 
     // Initialisation du calendrier et set des Actions ensuite
     initCalendrier() {
-        console.log('calendrier.js/initCalendrier');
-        fetch('../../agendapp/controllers/crud_rendezvous.php?action=get_dates')
-        .then(response => response.json())
-            .then(data => {
-                let rendezvousDates = {};
-                // Check if data.data is an object
-                if (data && data.data && typeof data.data === 'object') {
-                    // Map the data to the correct format
-                }
-                    Object.entries(data.data).forEach(([dateStr, count]) => {
-                        let [year, month, day] = dateStr.split("-");
-                        rendezvousDates[`${day}-${month}-${year}`] = count;
-                    });
+        console.log('calendrier.js/initCalendrier -> fetching RDV\'s et Congés');
+        fetch('../../agendapp/controllers/rendezvous_crud.php?action=get_dates')
+            .then(response => response.json())
+            .then(rendezvousData => {
+                fetch('../../agendapp/controllers/conge_crud.php?action=get_dates')
+                    .then(response => response.json())
+                    .then(congeData => {
+                        // Check if rendezvousData.data and congeData.data are objects
+                        if (rendezvousData && rendezvousData.data && typeof rendezvousData.data === 'object'
+                            && congeData && congeData.data && typeof congeData.data === 'object') {
+                            let rendezvousDates = {};
+                            Object.entries(rendezvousData.data).forEach(([dateStr, count]) => {
+                                let [year, month, day] = dateStr.split("-");
+                                rendezvousDates[`${day}-${month}-${year}`] = count;
+                            });
 
-                    console.log(rendezvousDates);
-                    this.calendrierHTML = this.buildCalendrierHTML(this.annee, this.mois, rendezvousDates);
-                    document.getElementById(this.calendrierId).innerHTML = this.calendrierHTML;
-                    this.selectionJourCalendrier();
-                    this.clickVideClearInputs();
-                })
-            .catch(error => {
-                    // Handle any errors from the fetch or processing steps
-                    console.error('Error fetching or processing data:', error);
-                });
+                            let congeDates = {};
+                            congeData.data.forEach(dateStr => {
+                                let [year, month, day] = dateStr.split("-");
+                                congeDates[`${day}-${month}-${year}`] = true;
+                            });
+
+
+                            console.log(rendezvousDates, congeDates);
+                            this.calendrierHTML = this.buildCalendrierHTML(this.annee, this.mois, rendezvousDates, congeDates);
+                            document.getElementById(this.calendrierId).innerHTML = this.calendrierHTML;
+                            this.selectionJourCalendrier();
+                            this.formulaire.clearInputsFormulaire();
+                        }
+                    })
+                    .catch(error => console.error('Error fetching or processing conge data:', error));
+            })
+            .catch(error => console.error('Error fetching or processing rendezvous data:', error));
+        $('#btn_clientele').on('click', function (event) {
+            window.location.href = "../../agendapp/views/client_view.php";
+        });
     }
+
     // Assigne la liste de RDV et le formulaire au calendrier
     assignerDependances(listeRendezvous, formulaire) {
         this.listeRendezvous = listeRendezvous;
@@ -76,7 +89,15 @@ class Calendrier {
                             this.listeRendezvous.updateRendezvousListe(data.data);
                             //console.log(data.data);
                         } else {
-                            console.error('Error:', data.message);
+                            console.log(data.message);
+                        }            // Fetch Congé data for the same date
+                        return fetch(`../../agendapp/controllers/conge_crud.php?action=day&date=${dateStr}`);
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.status === 'success') {
+                            // Here you can process the Congé data as needed, e.g.:
+                            // this.listeConge.updateCongeListe(data.data);
                         }
                     })
                     .catch(error => {
@@ -161,11 +182,13 @@ class Calendrier {
                     // Assigner une classe rdv day ou holiday à chaque cellule
                     let currentDate = `${day.toString().padStart(2, '0')}-${(month + 1).toString().padStart(2, '0')}-${year}`;
                     let additionalClass = '';
-                    if (rendezvousDates[currentDate] > 2) {
+                    if (congeDates[currentDate]) {
+                        additionalClass = ' conge';
+                    } else if (rendezvousDates[currentDate] > 2) {
                         additionalClass = ' excessive-rendezvous';
                     } else if (rendezvousDates[currentDate] > 1) {
                         additionalClass = ' multiple-rendezvous';
-                    } else if (rendezvousDates[currentDate] > 0){
+                    } else if (rendezvousDates[currentDate] > 0) {
                         additionalClass = ' rendezvous';
                     }
                     calendarHTML += `<td class="day${additionalClass}" data-day="${day}" data-year="${year}" data-month="${month}" data-date="${day.toString().padStart(2, '0')}-${(month + 1).toString().padStart(2, '0')}-${year}">${day}</td>`;
