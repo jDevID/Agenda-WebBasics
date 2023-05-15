@@ -19,6 +19,7 @@
     <div id="calendar"></div>
     <div class="calendar-controls">
         <button id="btn_moisPrecedentId">Précédent</button>
+        <button id="btn_clientele">Clientèle</button>
         <button id="btn_moisSuivantId">Suivant</button>
     </div>
 </div>
