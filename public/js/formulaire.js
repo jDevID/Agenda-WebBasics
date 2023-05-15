@@ -7,6 +7,8 @@ class Formulaire {
     // Assigner sa place dans la vue
     constructor(formId, listeRendezvous) {
         this.formId = formId;
+        this.listeRendezvous = listeRendezvous;
+        this.isConge = false;
     }
 
     initialize() {
@@ -26,7 +28,7 @@ class Formulaire {
             $.ajax({
                 // Coordonnées
                 type: 'POST',
-                url: '../controllers/crud_rendezvous.php',
+                url: '../controllers/rendezvous_crud.php',
                 data: formData,
                 success: function (data) {
                     // Ajax étant asynchrone c'est à la suite qu'on refresh
@@ -96,6 +98,48 @@ class Formulaire {
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Error:', textStatus, errorThrown);
                 console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    toggleConge(date) {
+        // Get the current state of the conge for this date
+        if (!date) {
+            console.error('Date is undefined or null');
+            return;
+        }
+
+        let self = this; //
+
+
+        // Use AJAX to get the current state of the conge for this date
+        $.ajax({
+            type: 'GET',
+            url: '../../agendapp/controllers/conge_crud.php',
+            data: {action: 'check', date: date},
+            dataType: 'json',
+            async: false, // This makes the AJAX request synchronous
+            success: function (response) {
+                console.log(response);
+                self.isConge = response.data.isConge;
+            },
+            error: function () {
+                console.error('There was a problem with the request');
+            }
+        });
+        // Toggle the state
+        this.isConge = !this.isConge;
+        // Send a request to the server to update the conge state
+        $.ajax({
+            type: 'POST',
+            url: '../../agendapp/controllers/conge_crud.php',
+            data: {action: this.isConge ? 'save' : 'delete', date: date},
+            success: function (data) {
+                // Refresh the calendar
+                calendar.initCalendrier();
+            },
+            error: function () {
+                console.error('There was a problem with the request');
             }
         });
     }
