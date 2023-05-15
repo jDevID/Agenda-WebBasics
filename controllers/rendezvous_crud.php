@@ -2,7 +2,6 @@
 // Create Read Update Delete RDV
 require_once 'session_check.php';
 require_once '../models/Rendezvous.class.php';
-require_once '../validation/rendezvous_validator.php';
 
 // Afficher un rapport d'erreur (testing)
 ini_set('display_errors', 1);
@@ -31,6 +30,17 @@ function response($status, $message = '', $data = null)
     // This will output the JSON response to the caller (AJAX).
     header('Content-Type: application/json');
     echo json_encode($logData);
+}
+
+function extract_form_data($fields): array
+{
+    $data = [];
+
+    foreach ($fields as $field) {
+        $data[$field] = $_POST[$field] ?? null;
+    }
+
+    return $data;
 }
 
 try {
