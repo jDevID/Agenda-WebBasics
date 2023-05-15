@@ -41,10 +41,3 @@ VALUES ('2023-05-17'),
        ('2023-05-23'),
        ('2023-05-24');
 
-INSERT INTO rendezvous (user_id, client_id, name, description, date, start_hour, end_hour) VALUES
-    (1, 1, 'Rendezvous1', 'Description1', '2023-05-15', '09:00:00', '10:00:00'),
-    (2, 2, 'Rendezvous2', 'Description2', '2023-05-16', '10:00:00', '11:00:00');
-
-INSERT INTO conge (date) VALUES
-                             ('2023-05-17'),
-                             ('2023-05-18');
