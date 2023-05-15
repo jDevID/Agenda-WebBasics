@@ -37,6 +37,15 @@ function response($status, $message = '', $data = null)
 try {
 // Selon l'action du paramètre, on détermine le traitement voulu
     switch ($action) {
+        case 'getRendezvousForClient':
+            if (!is_null($id)) {
+                $data = $client->getRendezvousForClient($id);
+                response('success', '', $data);
+            } else {
+                response('error', 'No ID provided for getRendezvousForClient');
+            }
+            break;
+
         case 'list':
             $data = $client->getAllClientsArray();
             response('success', '', $data);
@@ -91,4 +100,5 @@ try {
 } catch (Exception $e) {
     response('error', 'An error occurred: ' . $e->getMessage());
 }
+
 ?>
