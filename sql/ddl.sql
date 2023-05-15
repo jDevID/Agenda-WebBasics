@@ -31,3 +31,8 @@ CREATE TABLE IF NOT EXISTS rendezvous (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY  (client_id) REFERENCES client(id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS conge (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date DATE NOT NULL
+) ENGINE=InnoDB;
