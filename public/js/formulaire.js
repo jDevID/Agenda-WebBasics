@@ -54,7 +54,24 @@ class Formulaire {
             formulaire.trigger('submit');
         });
         this.populateClientSelectBox();
+        // Event Listener Bouton conge
+        $('#congeBtn').off('click').on('click', function (event) {
+            event.preventDefault();
+            let dateInput = $('#date');
+            self.toggleConge(dateInput.val());
+            console.log(dateInput.val());
+        });
+
+        let client = $('#client');
+        client.change(() => {
+            let clientId = client.val();
+            console.log(clientId);
+            console.log(client.val());
+            let rdvOfCLient = this.listeRendezvous.getRendezvousForClient(clientId);
+            console.log()
+        });
     }
+
     populateClientSelectBox() {
         let self = this;
         $.ajax({
@@ -118,11 +135,17 @@ class Formulaire {
             formInputDescription.value = rendezvousData ? rendezvousData.description : "";
         }
         if (formInputClient) {
-            formInputClient.value = rendezvousData ? rendezvousData.client_id : "";
+            let clientId = rendezvousData ? rendezvousData.client_id : "";
+            // Check if an option with value clientId exists in the select box
+            if ($('#client option[value="' + clientId + '"]').length > 0) {
+                // If it exists, set the select box's value
+                formInputClient.value = clientId;
+            } else {
+                // If it doesn't exist, clear the select box's value
+                formInputClient.value = "";
+            }
         }
-
     }
-
 
     // Methode utilitaire pour vider les inputs
     clearInputsFormulaire() {
