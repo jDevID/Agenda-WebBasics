@@ -8,11 +8,13 @@
 *
  */
 class Calendrier {
-    constructor(containerId, listeRendezvous, formulaire) {
+    constructor(containerId, formulaire) {
         this.calendrierId = containerId;
         this.formulaire = formulaire;
         this.annee = new Date().getFullYear();
         this.mois = new Date().getMonth();
+
+        this.clickVideClearInputs();
     }
 
     // Initialisation du calendrier et set des Actions ensuite
