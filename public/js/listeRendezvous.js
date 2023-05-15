@@ -28,6 +28,25 @@ class ListeRendezvous {
         this.calendar = calendar;
         this.formulaire = formulaire;
     }
+    getRendezvousForClient(clientId) {
+        const self = this; // To resolve issues with `this` in the context of the callback
+        fetch(`../../agendapp/controllers/client_crud.php?action=getRendezvousForClient&id=${clientId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.status === 'success') {
+                    self.updateRendezvousListe(data.data);
+                    console.log(data.data);
+                    return data.data;
+                } else {
+                    console.error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+    }
+
 
     // Update la DOM avec la list des RDV, trie puis crée la list d'élément
     // L'event listener permet de remplir les inputs du formulaireID en 1 click
