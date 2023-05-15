@@ -32,6 +32,56 @@ class Rendezvous extends DAL
         }
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    public function getStartHour(): string
+    {
+        return $this->start_hour;
+    }
+
+    public function getEndHour(): string
+    {
+        return $this->end_hour;
+    }
+
+    public function getClient(): int
+    {
+        return $this->client_id;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getStatus(): string
+    {
+        // determine status based on current date/time
+        $now = new DateTime();
+        if ($now > new DateTime($this->date . ' ' . $this->end_hour)) {
+            $status = 'passé';
+        } else {
+            $status = 'futur';
+        }
+        return $status;
+    }
+
     public
     function getAllRendezvousArray(): array
     {
@@ -114,15 +164,25 @@ class Rendezvous extends DAL
 
         return $this->executeRendezvousQuery($sql, $params);
     }
-}
 
-//    public function getRendezvousByMonth($year, $month)
-//    {
-//        $query = "SELECT * FROM rendezvous WHERE YEAR(date) = :year AND MONTH(date) = :month ORDER BY date, start_hour";
-//        $stmt = $this->conn->prepare($query);
-//        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
-//        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
-//        $stmt->execute();
-//
-//        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-//    }
+    public function getEmail(): ?string
+    {
+        // Fetch the client from the database using the client_id
+        $clientQuery = "SELECT email FROM client WHERE id = :client_id";
+        $stmt = $this->conn->prepare($clientQuery);
+        $stmt->execute([':client_id' => $this->client_id]);
+
+        // Fetch the email from the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If no result was found, return null
+        if (!$result) {
+            return null;
+        }
+
+        // Return the email
+        return $result['email'];
+    }
+
+
+}
