@@ -3,9 +3,13 @@
 
 USE DavidBotton;
 
+-- CONNECT WITH
+-- username = abc
+-- password = abc
+-- OR REGISTER AN ACCOUNT
 INSERT INTO users (username, password)
-VALUES ('abc', '$2y$10$eULLEYT58mRfJa61jhczSOtjeTsEV59JceBEfuCJanx0HGGWkKRQa'); -- password = abc
-
+VALUES ('abc', '$2y$10$eULLEYT58mRfJa61jhczSOtjeTsEV59JceBEfuCJanx0HGGWkKRQa');
+-- abc -> blowfish cipher (hashing) = $2y$10$eULLEYT58mRfJa61jhczSOtjeTsEV59JceBEfuCJanx0HGGWkKRQa
 
 INSERT INTO client (id, name, email)
 VALUES (1, 'John Smith', 'john@example.com'),
@@ -36,3 +40,11 @@ VALUES ('2023-05-17'),
        ('2023-05-21'),
        ('2023-05-23'),
        ('2023-05-24');
+
+INSERT INTO rendezvous (user_id, client_id, name, description, date, start_hour, end_hour) VALUES
+    (1, 1, 'Rendezvous1', 'Description1', '2023-05-15', '09:00:00', '10:00:00'),
+    (2, 2, 'Rendezvous2', 'Description2', '2023-05-16', '10:00:00', '11:00:00');
+
+INSERT INTO conge (date) VALUES
+                             ('2023-05-17'),
+                             ('2023-05-18');
