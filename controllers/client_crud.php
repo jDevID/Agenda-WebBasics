@@ -18,6 +18,7 @@ $user_id = $_SESSION['user_id'];
 
 $client = new Client();
 
+// Fonction utilitaire pour répondre
 function response($status, $message = '', $data = null)
 {
     $logData = ['status' => $status, 'message' => $message, 'data' => $data];
@@ -29,7 +30,7 @@ function response($status, $message = '', $data = null)
     fwrite($logFile, json_encode($logData) . "\n");
     fclose($logFile);
 
-    // This will output the JSON response to the caller (AJAX).
+
     header('Content-Type: application/json');
     echo json_encode($logData);
 }
@@ -38,19 +39,22 @@ try {
 // Selon l'action du paramètre, on détermine le traitement voulu
     switch ($action) {
         case 'getRendezvousForClient':
+            $id = $_GET['id'];
             if (!is_null($id)) {
                 $data = $client->getRendezvousForClient($id);
                 response('success', '', $data);
             } else {
-                response('error', 'No ID provided for getRendezvousForClient');
+                response('error', 'getRendezvousForClient -> id est null');
             }
             break;
 
+            // lister les clients
         case 'list':
             $data = $client->getAllClientsArray();
             response('success', '', $data);
             break;
 
+            // sauver un client
         case 'save':
             $name = $_POST['name'];
             $email = $_POST['email'];
@@ -62,7 +66,7 @@ try {
                 response('error', 'Error saving client');
             }
             break;
-
+        // modifier un client
         case 'update':
             if (!is_null($id)) {
                 $name = $_POST['name'];
@@ -79,7 +83,7 @@ try {
                 response('error', 'No ID provided for update');
             }
             break;
-
+        // supprimer un client si il n'a plus de rendezvous
         case 'delete':
             if (!is_null($id)) {
                 $result = $client->supprimerClientById($id);

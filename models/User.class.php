@@ -23,7 +23,6 @@ class User extends DAL # abstract DAL.class.php = héritage du PDO
         $stmt->execute([':username' => $username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // TODO: Better handling...
         if ($user && password_verify($password, $user['password'])) {
             return $user;
         }

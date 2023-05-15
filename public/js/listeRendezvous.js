@@ -29,7 +29,7 @@ class ListeRendezvous {
         this.formulaire = formulaire;
     }
     getRendezvousForClient(clientId) {
-        const self = this; // To resolve issues with `this` in the context of the callback
+        const self = this; // résoudre le this en callback
         fetch(`../../agendapp/controllers/client_crud.php?action=getRendezvousForClient&id=${clientId}`)
             .then(response => response.json())
             .then(data => {

@@ -20,6 +20,11 @@ class Client extends DAL { # abstract DAL.class.php = héritage du PDO
 
     public function getRendezvousForClient($clientId): array
     {
+        if ($clientId === null) {
+            error_log('pas d\'id client fourni pour générer la liste de rdv par id');
+            return [];
+        }
+
         $sql = "SELECT * FROM rendezvous WHERE client_id = :client_id";
         $params = [':client_id' => $clientId];
 
@@ -71,11 +76,4 @@ class Client extends DAL { # abstract DAL.class.php = héritage du PDO
         return $this->executeClientQuery($sql, $params);
     }
 
-    public function getClientRendezvous(int $clientId): array
-    {
-        $query = "SELECT * FROM rendezvous WHERE user_id = :clientId ORDER BY date, start_hour";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute([':clientId' => $clientId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
 }

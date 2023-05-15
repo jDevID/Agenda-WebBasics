@@ -78,21 +78,20 @@ class Formulaire {
         let self = this;
         $.ajax({
             type: 'GET',
-            url: '../controllers/client_crud.php', // replace with your API endpoint for getting all clients
+            url: '../controllers/client_crud.php',
             data: {action: 'list'},
             dataType: 'json',
             success: function (response) {
                 let select = $('#client');
                 for (let client of response.data) {
-                    // Display in the format 'client_id, client_name'
                     select.append(new Option(client.id + ', ' + client.name, client.id));
                 }
 
-                // Add a change event listener to fill the name input with the selected client's name
+                // remplir le nom
                 select.off('change').change(function () {
                     let selectedOption = $(this).find('option:selected').text();
-                    let clientName = selectedOption.split(', ')[1]; // get the client's name
-                    $('#name').val(clientName); // set the name input's value to the client's name
+                    let clientName = selectedOption.split(', ')[1]; // pour avoir le nom correct
+                    $('#name').val(clientName);
                 });
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -103,7 +102,6 @@ class Formulaire {
     }
 
     toggleConge(date) {
-        // Get the current state of the conge for this date
         if (!date) {
             console.error('Date is undefined or null');
             return;
@@ -112,13 +110,13 @@ class Formulaire {
         let self = this; //
 
 
-        // Use AJAX to get the current state of the conge for this date
+        // Avoir congé ou non pour la date
         $.ajax({
             type: 'GET',
             url: '../../agendapp/controllers/conge_crud.php',
             data: {action: 'check', date: date},
             dataType: 'json',
-            async: false, // This makes the AJAX request synchronous
+            async: false, // AJAX synchrone
             success: function (response) {
                 console.log(response);
                 self.isConge = response.data.isConge;
@@ -127,15 +125,15 @@ class Formulaire {
                 console.error('There was a problem with the request');
             }
         });
-        // Toggle the state
+
         this.isConge = !this.isConge;
-        // Send a request to the server to update the conge state
+        // AJAX pour la sauvegarde et l'update
         $.ajax({
             type: 'POST',
             url: '../../agendapp/controllers/conge_crud.php',
             data: {action: this.isConge ? 'save' : 'delete', date: date},
             success: function (data) {
-                // Refresh the calendar
+                // reload calendrier
                 calendar.initCalendrier();
             },
             error: function () {
@@ -180,12 +178,12 @@ class Formulaire {
         }
         if (formInputClient) {
             let clientId = rendezvousData ? rendezvousData.client_id : "";
-            // Check if an option with value clientId exists in the select box
+            //check si la valeur existe
             if ($('#client option[value="' + clientId + '"]').length > 0) {
-                // If it exists, set the select box's value
+                // si ça existe on select la valeur
                 formInputClient.value = clientId;
             } else {
-                // If it doesn't exist, clear the select box's value
+                // si ça n'exite pas on clear
                 formInputClient.value = "";
             }
         }
@@ -197,7 +195,7 @@ class Formulaire {
         // l'input id est hidden dans la vue
         const inputs = form.querySelectorAll("input[type='id'],input[type='text'], input[type='date'], input[type='time'], textarea, select");
         inputs.forEach((input) => {
-            // for each vider
+            // vider pour chacun
             input.value = "";
         });
     }

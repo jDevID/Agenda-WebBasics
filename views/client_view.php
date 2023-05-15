@@ -8,7 +8,8 @@
 <body>
 <h1>Client List</h1>
 <ul id="client_list"></ul>
-
+<h1>Client Rendezvous</h1>
+<ul id="client_rendezvous"></ul>
 <h1>Add Client</h1>
 <form id="add_client_form">
     <label for="client_name">Name:</label><br>
@@ -24,12 +25,12 @@
     <input type="number" id="client_id" name="client_id" required><br>
     <input type="submit" name="delete_client" value="Delete Client">
 </form>
-
+<button id="btn_calendrier">Calendrier</button>
 <script src="../public/js/clientele.js"></script>
 
 
 <script>
-    let clientele = new Clientele("client_list");
+    let clientele = new Clientele("client_list", "client_rendezvous");
     clientele.refreshClientList();
 </script>
 

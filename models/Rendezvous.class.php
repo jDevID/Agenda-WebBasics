@@ -3,7 +3,6 @@ require_once '../data/DAL.class.php';
 
 class Rendezvous extends DAL
 { // Classe Rendez-vous hérite du PDO par la DAL
-    private $client_id;
 
     /** Méthode utilitaire RDV
      * @throws Exception
@@ -30,8 +29,6 @@ class Rendezvous extends DAL
     /**
      * @throws Exception
      */
-
-
     public
     function getAllRendezvousArray(): array
     {
@@ -113,6 +110,14 @@ class Rendezvous extends DAL
         $params = [':id' => $id];
 
         return $this->executeRendezvousQuery($sql, $params);
+    }
+    public function getRendezvousById($id) : array
+    {
+        $query = "SELECT * FROM rendezvous WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 

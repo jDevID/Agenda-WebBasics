@@ -1,26 +1,64 @@
 class Clientele {
-    constructor(listId) {
-        this.clientList = document.getElementById(listId);
+    constructor(listeClientId, listeRendezvousId) {
+        this.listeClient = document.getElementById(listeClientId);
+        this.listeRendezvous = document.getElementById(listeRendezvousId);
+
         this.selectedClientId = null;
         this.addEventListeners();
     }
 
     addEventListeners() {
         $('#add_client_form').on('submit', (event) => {
+            console.log('#add_client_form -> submit')
             event.preventDefault();
             this.saveChanges();
         });
 
         $('#delete_client_form').on('submit', (event) => {
+
             event.preventDefault();
             this.selectedClientId = $('#client_id').val();
+            console.log('#delete_client_form -> submit')
             this.deleteClient();
         });
-
+        $('#btn_calendrier').on('click', function (event) {
+            window.location.href = "../../agendapp/views/main_view.php";
+        });
         $(document).on('click', '#client_list li', function (event) {
             this.selectedClientId = $(event.currentTarget).data('id');
+            console.log('#client_list -> client selec ID = ', this.selectedClientId); // check id
+
             $('#client_id').val(this.selectedClientId);
+            this.refreshClientRendezvous();
         }.bind(this));
+    }
+
+    refreshClientRendezvous() {
+        console.log('getRendezvousForClient  -> ID = ', this.selectedClientId); // Check l'id
+        $.ajax({
+            type: 'GET',
+            url: '../../agendapp/controllers/client_crud.php',
+            data: {action: 'getRendezvousForClient', id: this.selectedClientId},
+            dataType: 'json',
+            success: (response) => {
+                if (response.status === 'success') {
+                    console.log('Rdv futur id '+this.selectedClientId+' = '+response.data);
+                    this.createRendezvousElementHTML(response.data);
+                } else {
+                    console.error('Error:', response.message);
+                }
+            },
+            error: this.handleAjaxError
+        });
+    }
+
+    createRendezvousElementHTML(data) {
+        this.listeRendezvous.innerHTML = '';
+        for (let item of data) {
+            let li = document.createElement('li');
+            li.textContent = item.date + ' - ' + item.start_hour;
+            this.listeRendezvous.appendChild(li);
+        }
     }
 
     refreshClientList() {
@@ -40,12 +78,14 @@ class Clientele {
     }
 
     creerListeElementHTML(data) {
-        this.clientList.innerHTML = '';
+        this.listeClient.innerHTML = '';
         for (let item of data) {
             let li = document.createElement('li');
-            li.textContent = item.name + ' - ' + item.email;
+            li.textContent = item.id + ' :' + item.name + ' - ' + item.email;
             li.dataset.id = item.id;
-            this.clientList.appendChild(li);
+            // convertir l'id en string
+            // li.dataset.id = item.id.toString();
+            this.listeClient.appendChild(li);
         }
     }
 

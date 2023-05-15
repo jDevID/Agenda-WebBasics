@@ -16,7 +16,7 @@ else {
         session_start();
         $_SESSION['username'] = $result['username'];
         $_SESSION['user_id'] = $result['id'];
-        header('Location: ../views/list_appointments_view.php');
+        header('Location: ../views/main_view.php');
         exit();
     } else {
         // si le log-in fails, redirection

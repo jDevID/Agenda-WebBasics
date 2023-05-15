@@ -18,14 +18,6 @@ class Conge extends DAL {
         }
     }
 
-//    public function getAllCongesArray(): array
-//    {
-//        $query = "SELECT * FROM conge ORDER BY date";
-//        $stmt = $this->conn->prepare($query);
-//        $stmt->execute();
-//        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-//    }
-
     public function creerConge($date): bool {
         $sql = "INSERT INTO conge (date) VALUES (:date)";
         $params = [':date' => $date];
@@ -50,7 +42,6 @@ class Conge extends DAL {
     }
 
     public function checkCongeByDate($date) : bool {
-        // query to check if the date exists in the conge table
         $query = "SELECT * FROM conge WHERE date = :date";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':date', $date);
