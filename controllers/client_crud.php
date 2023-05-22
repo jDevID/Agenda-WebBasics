@@ -2,7 +2,6 @@
 // Create Read Update Delete CLIENT
 require_once 'session_check.php';
 require_once '../models/Client.class.php';
-require_once '../validation/validator.php';
 
 
 // Afficher un rapport d'erreur (testing)
