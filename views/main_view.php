@@ -9,26 +9,45 @@
     <script src="../public/js/calendrier.js"></script>
     <link rel="stylesheet" href="../public/css/calendrier.css">
     <link rel="icon" href="../fav.ico" type="image/x-icon">
-    <!-- JQuery librairie Js, permet la manipulation aisée de documents HTML -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="../public/js/list_rendezvous.js"></script>
+    <script src="../public/js/list_client.js"></script>
+    <script src="../public/js/toast.js"></script>
+    <link rel="stylesheet" href="../public/css/toast.css">
+
 </head>
 
 
 <body>
-<div id="calendarContainer" class="calendar-container">
-    <div id="calendar"></div>
-    <div class="calendar-controls">
-        <button id="btn_moisPrecedentId">Précédent</button>
-        <button id="btn_clientele">Clientèle</button>
-        <button id="btn_moisSuivantId">Suivant</button>
-    </div>
-</div>
 
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-<div class="content">
-    <div class="left-column">
-        <div id="rendezvousForm" class="rendezvous-form">
-            <h2>Edition Rendez-vous</h2>
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
+    header('Location: ../views/login_view.php');
+    exit();
+}
+
+require_once('../data/UserDAL.class.php');
+require_once('../models/Toast.class.php');
+
+function setToast($message, $type) {
+    Toast::throwMessage($message, $type);
+}
+
+function getToast() {
+    $toast = Toast::getMessage();
+    if (!empty($toast['message'])) {
+        echo '<script type="text/javascript">',
+        'showToast("', $toast['message'], '", "', $toast['type'], '");',
+        '</script>';
+    }
+}
 
             <form id="rendezvousFormElem" action="../controllers/rendezvous_crud.php" method="post">
                 <input type="hidden" name="id" id="id">
@@ -89,20 +108,12 @@
         listeRendezvous.assignerDependances(calendar, formulaire);
         calendar.assignerDependances(listeRendezvous, formulaire);
 
-        formulaire.initialize();
-        console.log('Formulaire initialized');
-        listeRendezvous.initialize();
-        console.log('ListeRendezvous initialized');
-        listeRendezvous.refreshRendezvousListe();
-        console.log('ListeRendezvous refreshed');
+<?php
+if (isset($_SESSION['username'])) {
+    echo '<p>' . htmlspecialchars($_SESSION['username']) . ' - <a href="../controllers/logout.php">Se déconnecter</a></p>';
+}
+?>
 
-        calendar.initCalendrier();
-        console.log('Calendrier initialized');
-        calendar.cycleMoisAnnee();
-        console.log('Calendrier month/year cycled');
-    });
-
-</script>
-
+<?php getToast(); ?>
 </body>
 </html>
