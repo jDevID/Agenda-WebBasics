@@ -15,20 +15,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     require('../views/login_view.php');
 }
 else {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
-    $user = new User();
-    $result = $user->login($username, $password);
+    $userDAL = new UserDAL();
+    $userFactory = new UserFactory();
 
-    if ($result) {
-        session_start();
-        $_SESSION['username'] = $result['username'];
-        $_SESSION['user_id'] = $result['id'];
-        header('Location: ../views/main_view.php');
+    try {
+        $user = $userFactory->createUserForLogin($username, $password);
+
+        if ($user->getUsername()) {
+            $userDAL->checkUserExists($user->getUsername());
+        }
+
+        $user = $userDAL->login($user);
+
+        if ($user) {
+            $_SESSION['username'] = $user->getUsername();
+            $_SESSION['user_id'] = $user->getId();
+            $_SESSION['role'] = $user->getRole();
+            header('Location: ../views/main_view.php');
+            exit();
+        } else {
+            throw new Exception('Login failed. Vérifiez vos identifiants.');
+        }
+
+    } catch (Exception $e) {
+        Toast::throwMessage($e->getMessage(), 'error');
+        header('Location: ../views/login_view.php');
         exit();
-    } else {
-        // si le log-in fails, redirection
-        require('../views/login_view.php');
     }
 }
+?>
