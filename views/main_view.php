@@ -30,11 +30,13 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
 require_once('../data/UserDAL.class.php');
 require_once('../models/Toast.class.php');
 
-function setToast($message, $type) {
+function setToast($message, $type)
+{
     Toast::throwMessage($message, $type);
 }
 
-function getToast() {
+function getToast()
+{
     $toast = Toast::getMessage();
     if (!empty($toast['message'])) {
         echo '<script type="text/javascript">',
@@ -43,64 +45,61 @@ function getToast() {
     }
 }
 
-            <form id="rendezvousFormElem" action="../controllers/rendezvous_crud.php" method="post">
-                <input type="hidden" name="id" id="id">
-                <input type="hidden" name="action" id="action" value="save">
-                <label for="client">Client:</label>
-                <select id="client" name="client" required></select>
-                <input type="hidden" name="name" id="name" required minlength="3" maxlength="35">
-                <br>
-                <label for="description">Description:</label>
-                <textarea name="description" id="description" required minlength="20" maxlength="300"></textarea>
-                <br>
-                <label for="start_hour">De:</label>
-                <input type="time" name="start_hour" id="start_hour" required>
-                <br>
-                <label for="end_hour">A:</label>
-                <input type="time" name="end_hour" id="end_hour" required>
-                <br>
-                <label for="date">Date:</label>
-                <input type="date" name="date" id="date" required>
-                <br>
-                <br>
-                <button type="submit" id="saveUpdateBtn" >Sauver</button>
-                <button type="button" id="deleteBtn">Annuler</button>
-                <button type="submit" id="congeBtn">Congé</button>
-            </form>
-            <div id="formError" class="alert alert-danger"></div>
+$userDAL = new UserDAL();
+$users = $userDAL->getAllUsers();
+?>
 
-        </div>
-    </div>
+<h1>Edition Rendez-vous</h1>
 
+<form method="POST" action="../controllers/add_rendezvous.php">
+    <label>Name :
+        <select name="user_id">
+            <?php foreach ($users as $user): ?>
+                <?php if ($user->getId() !== $_SESSION['user_id']): ?>
+                    <option value="<?= $user->getId(); ?>"><?= $user->getUsername(); ?></option>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </select>
+    </label>
+    <br>
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" minlength="20" maxlength="300" required></textarea><br>
 
-    <div class="right-column">
-        <h2>Liste des rendez-vous</h2>
-        <ul id="rendezvousList"></ul>
-    </div>
+    <label for="date">Date (DD-MM-YYYY):</label><br>
+    <input type="text" id="date" name="date" pattern="\d{2}-\d{2}-\d{4}" required><br>
 
-</div>
+    <label for="start_hour">Début (format: HH:MM):</label><br>
+    <input type="text" id="start_hour" name="start_hour" pattern="\d{2}:\d{2}" required><br>
 
+    <label for="end_hour">Fin (format: HH:MM):</label><br>
+    <input type="text" id="end_hour" name="end_hour" pattern="\d{2}:\d{2}" required><br>
 
-<script>
+    <input type="submit" value="Create Rendezvous">
+</form>
 
-    let calendar;
-    let formulaire;
-    let listeRendezvous;
-    // Assignation des classes aux id dans la vue
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log('DOM Content Loaded');
+<h1>Edition Client</h1>
 
-        listeRendezvous = new ListeRendezvous("rendezvousList");
-        console.log('ListeRendezvous created');
+<form method="POST" action="../controllers/add_client.php">
+    <label for="username">Pseudonyme:</label><br>
+    <input type="text" id="username" name="username" required><br>
 
-        formulaire = new Formulaire("rendezvousFormElem", listeRendezvous);
-        console.log('Formulaire created');
+    <label for="password">Mot de Passe:</label><br>
+    <input type="password" id="password" name="password" required><br>
 
-        calendar = new Calendrier("calendar");
-        console.log('Calendrier created');
+    <label for="role">Rôle:</label><br>
+    <select id="role" name="role" required>
+        <option value="admin">Admin</option>
+        <option value="client">Client</option>
+    </select><br>
 
-        listeRendezvous.assignerDependances(calendar, formulaire);
-        calendar.assignerDependances(listeRendezvous, formulaire);
+    <input type="submit" value="Create Client">
+</form>
+
+<h2>Liste des Rendez-vous</h2>
+<table id="table_rendezvous_list"></table>
+
+<h2>Liste des Clients</h2>
+<table id="table_client_list"></table>
 
 <?php
 if (isset($_SESSION['username'])) {
