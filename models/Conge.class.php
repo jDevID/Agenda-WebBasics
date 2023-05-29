@@ -1,67 +1,98 @@
 <?php
-require_once('../data/DAL.class.php');
 
-class Conge extends DAL {
+require_once('../data/CongeDAL.class.php');
 
-    private function executeCongeQuery($sql, $params): bool
+class Conge
+{
+    private CongeDAL $dal;
+    private int $id;
+    private string $date;
+
+
+    /**
+     * @throws Exception
+     */
+    public function __construct(CongeDAL $dal,
+                                   int $id = -1,
+                                   string $date = '')
     {
+        $this->dal = $dal;
+        $this->id = $id;
+        $this->setDate($date);
+    }
+
+    // Getters
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    public function getDateForMySQL(): string
+    {
+        $dateObj = DateTime::createFromFormat('d-m-Y', $this->date);
+        return $dateObj->format('Y-m-d');
+    }
+
+    // Setters
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setDate(string $date): void
+    {
+        $dateObj = DateTime::createFromFormat('Y-m-d', $date);
+        $this->date = $dateObj->format('d-m-Y');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function create(): bool {
         try {
-            $stmt = $this->conn->prepare($sql);
-            $executionSuccess = $stmt->execute($params);
-            if (!$executionSuccess) {
-                throw new Exception("Error: " . implode(" - ", $stmt->errorInfo()));
+            if ($this->checkHoliday($this->getDateForMySQL())) {
+                throw new Exception('Holiday already exists on this date.');
             }
-            return true;
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-            return false;
+            return $this->dal->createHoliday($this);
+        } catch (PDOException $e) {
+            throw new Exception('Database error: ' . $e->getMessage());
         }
     }
 
-    public function creerConge($date): bool {
-        $sql = "INSERT INTO conge (date) VALUES (:date)";
-        $params = [':date' => $date];
-
-        return $this->executeCongeQuery($sql, $params);
+    public function delete(): bool {
+        return $this->dal->deleteHolidayByDate($this);
     }
 
-    public function supprimerCongeByDate(string $date): bool {
-        $sql = "DELETE FROM conge WHERE date = :date";
-        $params = [':date' => $date];
-
-        return $this->executeCongeQuery($sql, $params);
+    public function getAll(): array {
+        return $this->dal->getAllDates();
     }
 
+    public function checkHoliday(string $date): bool {
+        // Change date format to 'd-m-Y' before checking
+        $dateObj = DateTime::createFromFormat('Y-m-d', $date);
+        $dateForCheck = $dateObj->format('d-m-Y');
 
-    public function getAllDates() {
-        $query = "SELECT date FROM conge ORDER BY date";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        // FETCH_COLUMN retourne un array indexé par col num
-        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+        return $this->dal->checkHolidayByDate($dateForCheck);
     }
 
-    public function checkCongeByDate($date) : bool {
-        $query = "SELECT * FROM conge WHERE date = :date";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':date', $date);
-        $stmt->execute();
-        if($stmt->rowCount() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    /**
+     * @throws Exception
+     */
+    public function findByDate(string $date): ?Conge {
+        $result = $this->dal->findHolidayByDate($date);
 
-    public function findByDate($date) {
-        $query = "SELECT * FROM conge WHERE date = :date";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':date', $date);
-        $stmt->execute();
-        if($stmt->rowCount() > 0) {
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return new Conge($this->dal, $result['id'], $result['date']);
         } else {
             return null;
         }
     }
 }
+
+?>
+
+

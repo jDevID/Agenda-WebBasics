@@ -1,124 +1,90 @@
 <?php
-require_once '../data/DAL.class.php';
+require_once('../data/RendezvousDAL.class.php');
 
-class Rendezvous extends DAL
-{ // Classe Rendez-vous hérite du PDO par la DAL
-
-    /** Méthode utilitaire RDV
-     * @throws Exception
-     */
-    private function executeRendezvousQuery($sql, $params): bool
-    {
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $executionSuccess = $stmt->execute($params);
-            // si problème lance l'exception
-            if (!$executionSuccess) {
-                throw new Exception("Error: " . implode(" - ", $stmt->errorInfo()));
-            }
-            return true; // OK
-
-        } catch (Exception $e) {
-            // Rapport d'exception
-            error_log($e->getMessage());
-            return false;
-        }
-    }
+class Rendezvous
+{
+    private RendezvousDAL $dal;
+    private int $id;
+    private string $description;
+    private string $date;
+    private string $start_hour;
+    private string $end_hour;
+    private int $user_id;
+    private DateTimeZone $timezone;
 
 
     /**
      * @throws Exception
      */
-    public
-    function getAllRendezvousArray(): array
+    public function __construct(
+        int           $id,
+        string        $description,
+        string        $date,
+        string        $start_hour,
+        string        $end_hour,
+        int           $user_id,
+        string        $timezone)
     {
-        $query = "SELECT * FROM rendezvous ORDER BY date, start_hour";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        // fetchAll retourne un tableau de résultat
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+        $this->id = $id;
+        $this->description = $description;
+        $this->date = $date;
+        $this->start_hour = $start_hour;
+        $this->end_hour = $end_hour;
+        $this->user_id = $user_id;
+        $this->timezone = new DateTimeZone($timezone);
 
-    public function getAllRendezvousForDay($date): array
-    {
-        $query = "SELECT * FROM rendezvous WHERE date = :date ORDER BY start_hour";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':date', $date);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-        public
-    function getCountRendezvousByDate(): array
-    {
-        $query = "SELECT date, COUNT(*) as count FROM rendezvous GROUP BY date ORDER BY date";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        // fetchAll retourne un tableau de résultat
-        return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    }
-
-    /** Créer un rendez-vous en DB
-     * / @throws Exception
-     */
-    public
-    function creerRendezvous($name, $description, $date, $start_hour, $end_hour, $client_id, $user_id): bool
-    {
-        $sql = "INSERT INTO rendezvous (name, description, date, start_hour, end_hour, client_id, user_id) 
-                VALUES (:name, :description, :date, :start_hour, :end_hour, :client_id, :user_id)";
-        $params = [
-            ':name' => $name,
-            ':description' => $description,
-            ':date' => $date,
-            ':start_hour' => $start_hour,
-            ':end_hour' => $end_hour,
-            ':client_id' => $client_id,
-            ':user_id' => $user_id,
-        ];
-
-        return $this->executeRendezvousQuery($sql, $params);
     }
 
 
-    /** Modifier un rendez-vous en DB
-     * @throws Exception
-     */
-    public
-    function modifierRendezvousById($id, $name, $description, $date, $start_hour, $end_hour, $client_id, $user_id): bool
+    public function getDateForMySQL(): string
     {
-        $sql = "UPDATE rendezvous SET name = :name, description = :description, date = :date, start_hour = :start_hour, end_hour = :end_hour, client_id = :client_id WHERE id = :id and user_id = :user_id";
-        $params = [
-            ':id' => $id,
-            ':name' => $name,
-            ':description' => $description,
-            ':date' => $date,
-            ':start_hour' => $start_hour,
-            ':end_hour' => $end_hour,
-            ':client_id' => $client_id,
-            ':user_id' => $user_id,
-        ];
-        // Envoi à la fonction utilitaire
-        return $this->executeRendezvousQuery($sql, $params);
+        $dateObj = DateTime::createFromFormat('d-m-Y', $this->date);
+        return $dateObj->format('Y-m-d');
+    }
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+    public function getStartHour(): string
+    {
+        return $this->start_hour;
     }
 
-    /** Deleter RDV
-     * @throws Exception
-     */
-    public function annulerRendezvousById(int $id): bool
+    public function getEndHour(): string
     {
-        $sql = "DELETE FROM rendezvous WHERE id = :id";
-        $params = [':id' => $id];
-
-        return $this->executeRendezvousQuery($sql, $params);
-    }
-    public function getRendezvousById($id) : array
-    {
-        $query = "SELECT * FROM rendezvous WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $this->end_hour;
     }
 
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
 
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function setUserId(int $user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
 }
+?>
+

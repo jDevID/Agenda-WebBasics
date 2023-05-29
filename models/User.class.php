@@ -1,34 +1,63 @@
 <?php
-require_once('../data/DAL.class.php');
+require_once('../data/UserDAL.class.php');
 
-# usage des prepared statements de type PDOStatement - $stmt (contre SQLi)
-# pas de validation ni de sanitization d'input (rien contre XSS et SSRF)
-
-class User extends DAL # abstract DAL.class.php = héritage du PDO
+class User
 {
-    public function register($username, $password)
+    private ?int $id;
+    private ?string $username;
+    private ?string $password;
+    private ?string $role;
+
+    public function __construct(?int $id = null, ?string $username = null, ?string $password = null, ?string $role = null)
     {
-        # bcrypt algorithm par défaut (blowfish cipher), simple
-        # ne jamais sauver plaintext
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
-        $stmt = $this->conn->prepare($sql); # prepared statement et méthode appartenant à objet PDO
-        $stmt->execute([':username' => $username, ':password' => $hashed_password]);
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+        $this->role = $role;
+    }
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
-    public function login($username, $password)
+    public function getUsername(): ?string
     {
-        $sql = "SELECT * FROM users WHERE username = :username";
-        $stmt = $this->conn->prepare($sql); # prepared statement et méthode appartenant à objet PDO
-        $stmt->execute([':username' => $username]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
-        }
-
-        return false;
+        return $this->username;
     }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+
+    // Setters
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
 }
 
 ?>
+
