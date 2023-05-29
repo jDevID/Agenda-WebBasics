@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgendApp | Rendez-vous</title>
-    <script src="../public/js/formulaire.js"></script>
-    <script src="../public/js/listeRendezvous.js"></script>
-    <script src="../public/js/calendrier.js"></script>
-    <link rel="stylesheet" href="../public/css/calendrier.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Rendezvous</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/list_rendezvous.js"></script>
     <script src="../public/js/list_client.js"></script>
@@ -15,8 +11,6 @@
     <link rel="stylesheet" href="../public/css/toast.css">
 
 </head>
-
-
 <body>
 
 <?php

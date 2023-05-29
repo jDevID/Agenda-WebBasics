@@ -12,8 +12,10 @@ $toastMessage = Toast::getMessage();
 
 ?>
 <!DOCTYPE html>
-<html lang="">
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/toast.js" defer></script>
