@@ -165,7 +165,27 @@ class UserDAL extends DAL
         return $this->executeQuery($sql, $params);
     }
 
+    public function deleteAllRendezvous(int $userId): int
+    {
+        $sql = "DELETE FROM rendezvous WHERE user_id = :user_id";
+        $params = [':user_id' => $userId];
 
+        $stmt = $this->executePDO($sql, $params);
+        return $stmt->rowCount();
+    }
+
+
+    public function executePDO(string $query, array $params = []): PDOStatement
+    {
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute($params);
+            return $stmt;
+        } catch (PDOException $e) {
+            // handle exception here, e.g., by logging it and re-throwing
+            throw $e;
+        }
+    }
 
 
 }
