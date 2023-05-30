@@ -24,6 +24,7 @@ $clientCount = $dal->countUsersByRole('client');
     <title>Agendapp - Inscription</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/toast.js" defer></script>
+    <script src="../public/js/formValidation.js" defer></script>
     <link rel="stylesheet" href="../public/css/toast.css">
 </head>
 <body>
@@ -31,11 +32,12 @@ $clientCount = $dal->countUsersByRole('client');
 <p>compte(s) admin: <?php echo $adminCount; ?></p>
 <p>compte(s) client: <?php echo $clientCount; ?></p>
 <form action="../controllers/register.php" method="post">
-    <label for="username">Username:</label>
-    <input type="text" name="username" id="username" required minlength="4" maxlength="25">
+    <label for="username">Nom:</label>
+    <input type="text" name="username" id="username" required minlength="4" maxlength="25" pattern="^[\p{L} ]{4,25}$">
     <br>
-    <label for="password">Password:</label>
-    <input type="password" name="password" id="password" required minlength="6" maxlength="20">
+    <label for="password">Mot de passe:</label>
+    <input type="password" name="password" id="password" required minlength="6" maxlength="20"
+           pattern="^(?=.*[A-Z])(?=.*\d)[^<>=\/\\\s]{6,20}$">
     <br>
     <input type="submit" value="Register">
 </form>

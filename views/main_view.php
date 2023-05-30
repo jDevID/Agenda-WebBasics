@@ -8,6 +8,7 @@
     <script src="../public/js/list_rendezvous.js"></script>
     <script src="../public/js/list_client.js"></script>
     <script src="../public/js/toast.js"></script>
+    <script src="../public/js/formValidation.js" defer></script>
     <link rel="stylesheet" href="../public/css/toast.css">
 
 </head>
@@ -80,7 +81,7 @@ $users = $userDAL->getAllUsers();
 <h1>Edition Client</h1>
 
 <form method="POST" action="../controllers/add_client.php">
-    <label for="username">Pseudonyme:</label><br>
+    <label for="username">Nom:</label><br>
     <input type="text" id="username" name="username" required><br>
 
     <label for="password">Mot de Passe:</label><br>

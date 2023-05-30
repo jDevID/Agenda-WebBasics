@@ -19,6 +19,7 @@ $toastMessage = Toast::getMessage();
     <title>Agendapp - Login</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/toast.js" defer></script>
+    <script src="../public/js/formValidation.js" defer></script>
     <link rel="stylesheet" href="../public/css/toast.css">
 </head>
 <body>
@@ -28,7 +29,8 @@ $toastMessage = Toast::getMessage();
     <input type="text" name="username" id="username" required minlength="4" maxlength="25" pattern="^[\p{L} ]{4,25}$">
     <br>
     <label for="password">Mot de Passe:</label>
-    <input type="password" name="password" id="password" required minlength="6" maxlength="20" pattern="^(?=.*[A-Z])(?=.*\d)[^<>=\/\\\s]{6,20}$">
+    <input type="password" name="password" id="password" required minlength="6" maxlength="20"
+           pattern="^(?=.*[A-Z])(?=.*\d)[^<>=\/\\\s]{6,20}$">
     <br>
     <input type="submit" value="Login">
 </form>
