@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $end_hour = $_POST['end_hour'];
 
     $rendezvousDAL = new RendezvousDAL();
-    $rendezvousFactory = new RendezvousFactory();
+    $rendezvousFactory = new RendezvousFactory($rendezvousDAL);
 
     try {
 
