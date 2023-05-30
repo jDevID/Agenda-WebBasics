@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Rendezvous</title>
+    <title>Agendapp - Main view</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/list_rendezvous.js"></script>
     <script src="../public/js/list_client.js"></script>

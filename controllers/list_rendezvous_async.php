@@ -48,4 +48,3 @@ foreach ($rendezvous as $rdv) {
 }
 echo '</rendezvousList>';
 ?>
-

@@ -38,5 +38,3 @@ foreach ($clients as $client) {
 }
 echo '</clientList>';
 ?>
-
-

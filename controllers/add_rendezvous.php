@@ -52,9 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
     } catch (Exception $e) {
-        Toast::throwMessage('Caught exception: ' . $e->getMessage());
+        Toast::throwMessage('try catch add_rendezvous -> UserFactory : Caught exception: ' . $e->getMessage());
         header('Location: ../views/main_view.php');
         exit;
     }
 }
-

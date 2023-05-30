@@ -21,7 +21,7 @@ $clientCount = $dal->countUsersByRole('client');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
+    <title>Agendapp - Inscription</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/toast.js" defer></script>
     <link rel="stylesheet" href="../public/css/toast.css">

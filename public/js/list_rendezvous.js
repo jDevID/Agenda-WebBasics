@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let th_end_hour = document.createElement("th");
 
         th_id.innerHTML = "ID";
-        th_clientName.innerHTML = "Client Name";
+        th_clientName.innerHTML = "Nom";
         th_description.innerHTML = "Description";
         th_date.innerHTML = "Date";
         th_start_hour.innerHTML = "Heure de début";
@@ -165,4 +165,3 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
 });
-

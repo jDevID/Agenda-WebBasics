@@ -16,7 +16,7 @@ $toastMessage = Toast::getMessage();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Agendapp - Login</title>
     <link rel="icon" href="../fav.ico" type="image/x-icon">
     <script src="../public/js/toast.js" defer></script>
     <link rel="stylesheet" href="../public/css/toast.css">
