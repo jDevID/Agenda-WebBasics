@@ -17,7 +17,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 $rendezvousDAL = new RendezvousDAL();
-$rendezvousFactory = new RendezvousFactory();
+$rendezvousFactory = new RendezvousFactory($rendezvousDAL);
 $timezone = 'Europe/Paris';
 $rendezvous = $rendezvousDAL->getAll($rendezvousFactory, $timezone);
 ob_clean();
