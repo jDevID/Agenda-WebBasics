@@ -17,8 +17,9 @@ class UserFactory
                                string $password = '',
                                string $role = ''): User
     {
-        $this->validateUserDetails($username, $password, $role);
+        $this->validateUserDetails($username, $password);
         $this->validateUserRole($role);
+        $this->validateUsernameAvailability($username);
 
         // Hache le mot de passe
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -41,6 +42,13 @@ class UserFactory
         // Validate password
         if (strlen($password) < 6 || strlen($password) > 20 || !preg_match('/[A-Z]/', $password) || !preg_match('/\d/', $password) || preg_match('/[<>=\/\\\]/', $password) || preg_match('/\s/', $password)) {
             throw new Exception('Le mot de passe doit comprendre entre 6 et 20 caractères, inclure au moins une lettre majuscule, un chiffre et ne peut pas contenir d\'espace, <, >, \', =, /, \\ .');
+        }
+    }
+
+    private function validateUsernameAvailability(string $username): void
+    {
+        if ($this->userDAL->checkUserExists($username)) {
+            throw new Exception("Ce nom d'utilisateur est déjà pris.");
         }
     }
 

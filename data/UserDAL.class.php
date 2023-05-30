@@ -72,13 +72,11 @@ class UserDAL extends DAL
         return false;
     }
 
-    public function checkUserExists(string $username): void
+    public function checkUserExists(string $username): bool
     {
         $userDB = $this->getUserByUsername($username);
 
-        if ($userDB === null) {
-            throw new Exception("Aucun compte ne correspond à ce Nom.");
-        }
+        return $userDB !== null;
     }
 
     public function getAllUsers(): array

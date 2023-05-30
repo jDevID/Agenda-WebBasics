@@ -19,14 +19,14 @@ if (!isset($_SESSION['username'])) {
 $userDAL = new UserDAL();
 $userFactory = new UserFactory($userDAL);
 
-$clients = $clientDAL->getAllUsers($clientFactory);
+$clients = $userDAL->getAllUsers();
 ob_clean();
 
 header('Content-Type: application/xml');
 echo '<?xml version="1.0" encoding="UTF-8" ?>';
 echo '<clientList>';
 foreach ($clients as $client) {
-    if ($client !== null) {
+    if ($client !== null && $client->getId() !== $_SESSION['user_id']) {
         $id = $client->getId();
         $name = $client->getUsername();
 

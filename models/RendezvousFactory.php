@@ -13,7 +13,8 @@ class RendezvousFactory
                                      string        $start_hour = '',
                                      string        $end_hour = '',
                                      int           $user_id = -1,
-                                     string        $timezone = 'Europe/Paris'): Rendezvous
+                                     string        $timezone = 'Europe/Paris',
+                                     bool          $checkAvailability = true): Rendezvous
     {
         $this->validateDescription($description);
         $this->validateDate($date);
@@ -21,7 +22,7 @@ class RendezvousFactory
         $this->validateTime($end_hour, $timezone);
 
 
-        if (!$dal->isTimeSlotAvailable($start_hour, $end_hour, $date, $user_id)) {
+        if ($checkAvailability && !$dal->isTimeSlotAvailable($start_hour, $end_hour, $date, $user_id)) {
             throw new Exception('Ce créneau horaire n\'est pas disponible.');
         }
 

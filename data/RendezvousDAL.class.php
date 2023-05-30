@@ -30,7 +30,8 @@ class RendezvousDAL extends DAL
                 $row['start_hour'],
                 $row['end_hour'],
                 $row['user_id'],
-                $timezone
+                $timezone,
+                false
             );
         }
 
