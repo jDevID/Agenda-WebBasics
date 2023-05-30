@@ -20,13 +20,13 @@ if (!isset($_SESSION['username'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
-        print_r($id);
-        // Instantiate factory and get timezone
-        $factory = new RendezvousFactory();
-        $timezone = $_SESSION['timezone'] ?? 'Europe/Paris'; // replace this with the appropriate value if needed
+
+        $timezone = $_SESSION['timezone'] ?? 'Europe/Paris';
 
         $rendezvousDAL = new RendezvousDAL();
-        $rendezvous = $rendezvousDAL->getRendezvousById($id, $factory, $timezone);
+        $factory = new RendezvousFactory($rendezvousDAL);
+
+        $rendezvous = $rendezvousDAL->getRendezvousById($id, $factory, $timezone, false);
 
         if (!$rendezvous) {
             Toast::throwMessage("No rendezvous found with ID $id.", "error");
@@ -34,31 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return;
         }
 
-        $currentDateTime = new DateTime('now', $rendezvous->getTimezone());
-        $rendezvousDateTime = DateTime::createFromFormat('d-m-Y H:i:s', $rendezvous->getDate() . ' ' . $rendezvous->getStartHour(), $rendezvous->getTimezone());
+        $result = $rendezvousDAL->delete($id);
 
-        $interval = $currentDateTime->diff($rendezvousDateTime);
-        $hours = $interval->h + ($interval->days * 24);
-
-
-        if ($hours < 24) {
-            Toast::throwMessage("Can't delete a rendezvous if it is less than 24 hours away.", "error");
-            http_response_code(403);
-        } else {
-            $rendezvousDAL->delete($id);
+        if ($result) {
             Toast::throwMessage("Rendezvous deleted successfully.");
             http_response_code(200);
-            $result = $rendezvousDAL->delete($id);
-            if ($result) {
-                Toast::throwMessage("Rendezvous deleted successfully.");
-                http_response_code(200);
-            } else {
-                // Error while deleting
-                Toast::throwMessage("Error deleting rendezvous with ID $id.", "error");
-                http_response_code(500);
-            }
+        } else {
+            // Error while deleting
+            Toast::throwMessage("Error deleting rendezvous with ID $id.", "error");
+            http_response_code(500);
         }
-//    }
+    } else {
+        // No id provided
+        http_response_code(400);
     }
 }
 ?>
