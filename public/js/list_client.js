@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     let th_action = document.createElement("th");
                     th_action.innerHTML = "Action";
                     tr_header.appendChild(th_action);
-                    let newDeleteButton = document.createElement("button");
+                    let newDeleteButton = document.createElement("button-del-client");
                     newDeleteButton.id = 'delete-button-client';
                     newDeleteButton.innerHTML = 'Delete';
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                                 let th_action = document.querySelector("#table_client_list th:last-child");
 
                             } else if (xhr.status === 403) {
-                                showToast('Impossible de se supprimer sois-même', 'error');
+                                showToast('403 opération interdite', 'error');
                             } else {
                                 showToast(`Erreur lors de la suppression client avec ID : ${selectedClientId}`, 'error');
                             }
