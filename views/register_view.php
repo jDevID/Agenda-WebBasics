@@ -53,7 +53,7 @@ if (isset($_SESSION['username'])) {
     let toastMessage = '<?php echo addslashes($toastMessage['message']); ?>';
     let toastType = '<?php echo addslashes($toastMessage['type']); ?>';
     if (toastMessage && toastType) {
-        window.onload = function() {
+        window.onload = function () {
             showToast(toastMessage, toastType);
         }
     }
