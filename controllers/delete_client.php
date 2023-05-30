@@ -21,28 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = $_POST['id'];
 
         if ($id == $_SESSION['user_id']) {
+            echo json_encode(['message' => 'Operation interdite.']);
             http_response_code(403);
             exit();
         }
 
         $userDAL = new UserDAL();
-        // Check si le client a encore des Rendezvous programmés
-        if ($userDAL->hasRendezvousInFutureById($id)) {
-            http_response_code(403);
-            Toast::throwMessage('Cet utilisateur a encore des Rendez-vous assignés.');
-            exit();
-        }
+
         $result = $userDAL->delete($id);
 
         if ($result) {
-            // Successfully deleted
+            echo json_encode(['message' => 'Suppression du Client.']);
             http_response_code(200);
         } else {
-            // Error while deleting
+            echo json_encode(['message' => 'Cet utilisateur a encore des Rendez-vous assignés.']);
             http_response_code(500);
         }
     } else {
-        // No id provided
+        echo json_encode(['message' => 'Aucun ID fourni.']);
         http_response_code(400);
     }
 }

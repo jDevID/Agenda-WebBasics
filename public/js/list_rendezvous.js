@@ -129,17 +129,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         xhr.send(`id=${selectedRendezvousId}`);
 
                         xhr.onload = function () {
+                            let responseMessage = JSON.parse(xhr.responseText).message;
                             if (xhr.status === 200) {
                                 selectedRendezvous.remove();
-                                showToast('Rendezvous supprimé', 'success');
+                                showToast(responseMessage, 'success');
                                 selectedRendezvous = null;
                                 selectedRendezvousId = null;
-                                let th_action = document.querySelector("#table_rendezvous_list th:last-child");
-
                             } else if (xhr.status === 403) {
-                                showToast('403 opération interdite', 'error');
+                                showToast(responseMessage, 'error');
                             } else {
-                                showToast(`Erreur lors de la suppression rendezvous avec ID : ${selectedRendezvousId}`, 'error');
+                                showToast(responseMessage, 'error');
                             }
 
                             newDeleteButton.disabled = false;

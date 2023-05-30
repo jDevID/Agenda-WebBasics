@@ -29,19 +29,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $rendezvous = $rendezvousDAL->getRendezvousById($id, $factory, $timezone, false);
 
         if (!$rendezvous) {
-            Toast::throwMessage("No rendezvous found with ID $id.", "error");
+            echo json_encode(['message' => "Pas de Rendez-vous à l'id $id."]);
             http_response_code(404);
+            return;
+        }
+
+        $rendezvousDateTime = new DateTime($rendezvous->getDate() . ' ' . $rendezvous->getStartHour(), new DateTimeZone('Europe/Paris'));
+        $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
+
+        if ($rendezvousDateTime->getTimestamp() - $now->getTimestamp() < 24 * 60 * 60) {
+            echo json_encode(['message' => "Impossible de supprimer un Rendez-vous moins de 24h avant."]);
+            http_response_code(403);
             return;
         }
 
         $result = $rendezvousDAL->delete($id);
 
         if ($result) {
-            Toast::throwMessage("Rendezvous deleted successfully.");
+            echo json_encode(['message' => "Rendez-vous supprimé."]);
             http_response_code(200);
         } else {
             // Error while deleting
-            Toast::throwMessage("Error deleting rendezvous with ID $id.", "error");
+            echo json_encode(['message' => "Erreur de suppression id $id."]);
             http_response_code(500);
         }
     } else {

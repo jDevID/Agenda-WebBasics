@@ -91,18 +91,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         xhr.send(`id=${selectedClientId}`);
 
                         xhr.onload = function () {
+                            let responseMessage = JSON.parse(xhr.responseText).message;
+
                             if (xhr.status === 200) {
                                 // Retirer le client de la table
                                 selectedClient.remove();
-                                showToast('Client supprimé', 'success');
+                                showToast(responseMessage, 'success');
                                 selectedClient = null;
                                 selectedClientId = null;
-                                let th_action = document.querySelector("#table_client_list th:last-child");
-
-                            } else if (xhr.status === 403) {
-                                showToast('403 opération interdite', 'error');
                             } else {
-                                showToast(`Erreur lors de la suppression client avec ID : ${selectedClientId}`, 'error');
+                                showToast(responseMessage, 'error');
                             }
 
                             newDeleteButton.disabled = false;
