@@ -20,15 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
 
-        if($id == $_SESSION['user_id']) {
+        if ($id == $_SESSION['user_id']) {
             http_response_code(403);
             exit();
         }
 
         $userDAL = new UserDAL();
+        // Check si le client a encore des Rendezvous programmés
+        if ($userDAL->hasRendezvousInFutureById($id)) {
+            http_response_code(403);
+            Toast::throwMessage('Cet utilisateur a encore des Rendez-vous assignés.');
+            exit();
+        }
         $result = $userDAL->delete($id);
 
-        if($result) {
+        if ($result) {
             // Successfully deleted
             http_response_code(200);
         } else {
