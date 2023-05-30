@@ -4,7 +4,14 @@ require_once('Rendezvous.class.php');
 
 class RendezvousFactory
 {
+    private RendezvousDAL $rendezvousDAL;
     private array $motsInterdits = ["Gloubiboulga", "Chapi-Chapo"];
+
+
+    public function __construct(RendezvousDAL $rendezvousDAL)
+    {
+        $this->rendezvousDAL = $rendezvousDAL;
+    }
 
     public function createRendezvous(RendezvousDAL $dal,
                                      int           $id = -1,
