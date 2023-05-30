@@ -62,7 +62,7 @@ class RendezvousDAL extends DAL
                 VALUES (:description, :date, :start_hour, :end_hour, :user_id)";
         $params = [
             ':description' => $rendezvous->getDescription(),
-            ':date' => $rendezvous->getDateForMySQL(),
+            ':date' => $rendezvous->getDate(),
             ':start_hour' => $rendezvous->getStartHour(),
             ':end_hour' => $rendezvous->getEndHour(),
             ':user_id' => $rendezvous->getUserId(),
@@ -77,7 +77,7 @@ class RendezvousDAL extends DAL
         $params = [
             ':id' => $rendezvous->getId(),
             ':description' => $rendezvous->getDescription(),
-            ':date' => $rendezvous->getDateForMySQL(),
+            ':date' => $rendezvous->getDate(),
             ':start_hour' => $rendezvous->getStartHour(),
             ':end_hour' => $rendezvous->getEndHour(),
             ':user_id' => $rendezvous->getUserId(),
