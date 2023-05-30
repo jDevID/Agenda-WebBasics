@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     let th_action = document.createElement("th");
                     th_action.innerHTML = "Action";
                     tr_header.appendChild(th_action);
-                    let newDeleteButton = document.createElement("button-del-client");
+                    let newDeleteButton = document.createElement("button");
                     newDeleteButton.id = 'delete-button-client';
                     newDeleteButton.innerHTML = 'Delete';
 
@@ -106,10 +106,45 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             newDeleteButton.disabled = false;
                         };
                     });
-
                     let td_action = document.createElement("td");
                     td_action.appendChild(newDeleteButton);
                     tr_client.appendChild(td_action);
+                }
+                if (!this.querySelector('#clear-data-button-client')) {
+                    let newClearDataButton = document.createElement("button");
+                    newClearDataButton.id = 'clear-data-button-client';
+                    newClearDataButton.innerHTML = 'Clear Data';
+
+                    newClearDataButton.addEventListener('click', function () {
+                        newClearDataButton.disabled = true;
+
+                        let xhr = new XMLHttpRequest();
+                        xhr.open('POST', '../controllers/delete_clientRendezvous.php', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.send(`id=${selectedClientId}`);
+
+                        xhr.onload = function () {
+                            let responseMessage = JSON.parse(xhr.responseText).message;
+
+                            if (xhr.status === 200) {
+                                showToast(responseMessage, 'success');
+                            } else {
+                                showToast(responseMessage, 'error');
+                            }
+
+                            newClearDataButton.disabled = false;
+                        };
+                    });
+
+
+                    let td_action = this.querySelector('td:last-child');
+                    if (td_action) {
+                        td_action.appendChild(newClearDataButton);
+                    } else {
+                        td_action = document.createElement("td");
+                        td_action.appendChild(newClearDataButton);
+                        this.appendChild(td_action);
+                    }
                 }
             });
 
