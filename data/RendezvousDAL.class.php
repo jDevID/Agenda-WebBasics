@@ -97,7 +97,7 @@ class RendezvousDAL extends DAL
     /**
      * @throws Exception
      */
-    public function getRendezvousById(int $id, RendezvousFactory $factory, string $timezone): ?Rendezvous
+    public function getRendezvousById(int $id): ?Rendezvous
     {
         $sql = "SELECT * FROM rendezvous WHERE id = :id";
         $params = [':id' => $id];
@@ -105,15 +105,14 @@ class RendezvousDAL extends DAL
         $result = $this->fetch($sql, $params);
 
         if ($result) {
-            return $factory->createRendezvous(
-                $this,
+            return new Rendezvous(
                 $result['id'],
                 $result['description'],
                 $result['date'],
                 $result['start_hour'],
                 $result['end_hour'],
                 $result['user_id'],
-                $timezone
+                'Europe/Paris'
             );
         } else {
             return null;
