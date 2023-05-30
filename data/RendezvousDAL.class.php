@@ -22,15 +22,11 @@ class RendezvousDAL extends DAL
         $rendezvous = [];
 
         foreach ($results as $row) {
-
-            $dateObj = DateTime::createFromFormat('Y-m-d', $row['date']);
-            $date = $dateObj->format('d-m-Y');
-
             $rendezvous[] = $factory->createRendezvous(
                 $this,
                 $row['id'],
                 $row['description'],
-                $date,
+                $row['date'],
                 $row['start_hour'],
                 $row['end_hour'],
                 $row['user_id'],
@@ -108,14 +104,11 @@ class RendezvousDAL extends DAL
         $result = $this->fetch($sql, $params);
 
         if ($result) {
-            $dateObj = DateTime::createFromFormat('Y-m-d', $result['date']);
-            $date = $dateObj->format('d-m-Y');
-
             return $factory->createRendezvous(
                 $this,
                 $result['id'],
                 $result['description'],
-                $date,
+                $result['date'],
                 $result['start_hour'],
                 $result['end_hour'],
                 $result['user_id'],

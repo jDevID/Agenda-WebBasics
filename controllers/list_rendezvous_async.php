@@ -36,6 +36,9 @@ foreach ($rendezvous as $rdv) {
         $start_hour = $rdv->getStartHour();
         $end_hour = $rdv->getEndHour();
 
+        $dateObj = DateTime::createFromFormat('Y-m-d', $rdv->getDate());
+        $date = $dateObj->format('d-m-Y');
+
         echo '<rendezvous>';
         echo "  <id>$id</id>";
         echo "  <clientName>$clientName</clientName>";

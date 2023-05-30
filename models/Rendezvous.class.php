@@ -34,13 +34,6 @@ class Rendezvous
         $this->timezone = new DateTimeZone($timezone);
 
     }
-
-
-    public function getDateForMySQL(): string
-    {
-        $dateObj = DateTime::createFromFormat('d-m-Y', $this->date);
-        return $dateObj->format('Y-m-d');
-    }
     public function getDate(): string
     {
         return $this->date;

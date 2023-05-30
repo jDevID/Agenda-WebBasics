@@ -68,13 +68,13 @@ class RendezvousFactory
             throw new Exception('Pas de date fournie.');
         }
 
-        $inputDate = DateTime::createFromFormat('d-m-Y', $date);
+        $inputDate = DateTime::createFromFormat('Y-m-d', $date);
         if ($inputDate === false) {
-            throw new Exception('Invalid date format. It should be DD-MM-YYYY.');
+            throw new Exception('Date invalide. format: DD-MM-YYYY.');
         }
 
         $currentDate = new DateTime('now');
-        $currentDate->setTime(0, 0); // Set time to start of day
+        $currentDate->setTime(0, 0);
 
         if ($inputDate < $currentDate) {
             throw new Exception('La date ne peut pas être dans le passé.');
