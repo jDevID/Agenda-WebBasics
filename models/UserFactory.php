@@ -4,6 +4,12 @@ require_once('User.class.php');
 
 class UserFactory
 {
+    private UserDAL $userDAL;
+
+    public function __construct(UserDAL $userDAL)
+    {
+        $this->userDAL = $userDAL;
+    }
 
     // Crée un nouvel utilisateur après validation
     public function createUser(int    $id = -1,

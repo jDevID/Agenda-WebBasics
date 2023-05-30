@@ -19,7 +19,7 @@ else {
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
     $userDAL = new UserDAL();
-    $userFactory = new UserFactory();
+    $userFactory = new UserFactory($userDAL);
 
     try {
         $user = $userFactory->createUserForLogin($username, $password);
