@@ -144,6 +144,19 @@ class UserDAL extends DAL
         return $this->executeQuery($sql, $params);
     }
 
+    public function hasRendezvousInFutureById(int $userId): bool
+    {
+        $currentDate = new DateTime('now');
+        $currentDateStr = $currentDate->format('Y-m-d');
+
+        $sql = "SELECT COUNT(*) as count FROM rendezvous 
+            WHERE user_id = :user_id AND date > :current_date";
+        $params = [':user_id' => $userId, ':current_date' => $currentDateStr];
+
+        $result = $this->fetch($sql, $params);
+        return $result && $result['count'] > 0;
+    }
+
     public function delete(int $id): bool
     {
         $sql = "DELETE FROM users WHERE id = :id";
