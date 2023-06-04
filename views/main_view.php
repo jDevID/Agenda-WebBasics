@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Agendapp - Main view</title>
-        <link rel="icon" href="../fav.ico" type="image/x-icon">
-        <script src="../public/js/list_rendezvous.js"></script>
-        <script src="../public/js/list_client.js"></script>
-        <script src="../public/js/toast.js"></script>
-        <script src="../public/js/formValidation.js" defer></script>
-        <link rel="stylesheet" href="../public/css/toast.css">
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agendapp - Main view</title>
+    <link rel="icon" href="../fav.ico" type="image/x-icon">
+    <script src="../public/js/list_rendezvous.js"></script>
+    <script src="../public/js/list_client.js"></script>
+    <script src="../public/js/list_conge.js"></script>
+    <script src="../public/js/toast.js"></script>
+    <script src="../public/js/formValidation.js" defer></script>
+    <link rel="stylesheet" href="../public/css/toast.css">
+    <link rel="stylesheet" href="../public/css/layout.css">
+</head>
+<body>
 
         <?php
         /*  *   *   *  VIEW - MAIN   *   *   *

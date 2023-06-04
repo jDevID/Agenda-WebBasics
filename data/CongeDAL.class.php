@@ -1,6 +1,9 @@
 <?php
-require_once '../data/DAL.class.php';
-require_once '../models/Conge.class.php';
+/*  *   *   * DATA - Congé  *   *   *
+ *
+ */
+require_once '../models/init.php';
+require_once '../models/CongeFactory.php';
 
 class CongeDAL extends DAL
 {
@@ -10,7 +13,7 @@ class CongeDAL extends DAL
         parent::__construct();
     }
 
-    public function createHoliday(Conge $conge): bool
+    public function createConge(Conge $conge): bool
     {
         $sql = "INSERT INTO conge (date) VALUES (:date)";
         $params = [':date' => $conge->getDate()];
@@ -18,22 +21,37 @@ class CongeDAL extends DAL
         return $this->executeQuery($sql, $params);
     }
 
-    public function deleteHolidayByDate(Conge $conge): bool
+    public function delete($id): bool
     {
         $sql = "DELETE FROM conge WHERE id = :id";
-        $params = [':id' => $conge->getId()];
+        $params = [':id' => $id];
 
         return $this->executeQuery($sql, $params);
     }
 
-    public function getAllDates(): array
+    public function getCongeById($id): ?Conge
+    {
+        $sql = "SELECT * FROM conge WHERE id = :id";
+        $params = [':id' => $id];
+        $result = $this->fetch($sql, $params);
+
+        if ($result) {
+            $rendezvousDAL = new RendezvousDAL();
+            $congeFactory = new CongeFactory($this, $rendezvousDAL);
+            return $congeFactory->populateConge($result['id'], $result['date']);
+        }
+
+        return null;
+    }
+
+    public function getAll(CongeFactory $factory): array
     {
         $sql = "SELECT * FROM conge ORDER BY date";
         $results = $this->fetchAll($sql);
         $conges = [];
 
         foreach ($results as $row) {
-            $conges[] = new Conge($row['id'], $row['date']);
+            $conges[] = $factory->populateConge($row['id'], $row['date']);
         }
 
         return $conges;
@@ -47,12 +65,17 @@ class CongeDAL extends DAL
         return $result != null;
     }
 
-    public function findHolidayByDate(string $date): ?array
+    public function update(Conge $conge): bool
     {
-        $sql = "SELECT * FROM conge WHERE date = :date";
-        $params = [':date' => $date];
-        return $this->fetchAll($sql, $params);
+        $sql = "UPDATE conge SET date = :date WHERE id = :id";
+        $params = [
+            ':date' => $conge->getDate(),
+            ':id' => $conge->getId(),
+        ];
+
+        return $this->executeQuery($sql, $params);
     }
+
 }
 
 ?>

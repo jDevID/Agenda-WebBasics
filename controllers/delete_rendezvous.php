@@ -39,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         /*  *  *   *   DEPENDANCES   *    *   *   */
         $rendezvousDAL = new RendezvousDAL();
-        $factory = new RendezvousFactory($rendezvousDAL);
+        $congeDAL = new CongeDAL();
+        $rendezvousFactory = new RendezvousFactory($rendezvousDAL, $congeDAL);
 
         /*  *  *   *   ACTION    *    *   *   */
         $rendezvous = $rendezvousDAL->getRendezvousById($id);
