@@ -12,7 +12,7 @@ class RendezvousDAL extends DAL
     /**
      * @throws Exception
      */
-    public function getAll(RendezvousFactory $factory, string $timezone): array
+    public function getAll(RendezvousFactory $factory): array
     {
 
         $sql = "SELECT * FROM rendezvous ORDER BY date, start_hour";
@@ -28,7 +28,31 @@ class RendezvousDAL extends DAL
                 $row['start_hour'],
                 $row['end_hour'],
                 $row['user_id'],
-                $timezone,
+                'Europe/Paris',
+                false
+            );
+        }
+
+        return $rendezvous;
+    }
+
+    public function getAllByUser(RendezvousFactory $factory, int $user_id): array
+    {
+
+        $sql = "SELECT * FROM rendezvous WHERE user_id = $user_id";
+        $results = $this->fetchAll($sql);
+        $rendezvous = [];
+
+        foreach ($results as $row) {
+            $rendezvous[] = $factory->createRendezvous(
+                $this,
+                $row['id'],
+                $row['description'],
+                $row['date'],
+                $row['start_hour'],
+                $row['end_hour'],
+                $row['user_id'],
+                'Europe/Paris',
                 false
             );
         }
@@ -71,14 +95,18 @@ class RendezvousDAL extends DAL
 
     public function update(Rendezvous $rendezvous): bool
     {
-        $sql = "UPDATE rendezvous SET  description = :description, date = :date, start_hour = :start_hour, end_hour = :end_hour WHERE id = :id and user_id = :user_id";
+        $sql = "UPDATE rendezvous 
+            SET description = :description, 
+                date = :date,
+                start_hour = :start_hour,
+                end_hour = :end_hour
+            WHERE id = :id";
         $params = [
             ':id' => $rendezvous->getId(),
             ':description' => $rendezvous->getDescription(),
             ':date' => $rendezvous->getDate(),
             ':start_hour' => $rendezvous->getStartHour(),
-            ':end_hour' => $rendezvous->getEndHour(),
-            ':user_id' => $rendezvous->getUserId(),
+            ':end_hour' => $rendezvous->getEndHour()
         ];
 
         return $this->executeQuery($sql, $params);
@@ -149,6 +177,16 @@ class RendezvousDAL extends DAL
         $holiday_count = $stmt->fetchColumn();
 
         return $holiday_count > 0;
+    }
+
+    public function existsRendezvousOnDate(DateTime $inputDate): bool
+    {
+        $sql = "SELECT * FROM rendezvous WHERE date = :date";
+        $params = [':date' => $inputDate->format('Y-m-d')];
+
+        $result = $this->fetch($sql, $params);
+
+        return $result != false;
     }
 }
 
