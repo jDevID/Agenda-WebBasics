@@ -52,10 +52,6 @@ class UserFactory
         }
     }
 
-    private function validateUserRole(string $role): void
-    {
-        // Here goes your role validation logic
-    }
 }
 
 ?>

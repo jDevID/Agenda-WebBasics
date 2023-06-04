@@ -3,7 +3,6 @@ require_once('../data/RendezvousDAL.class.php');
 
 class Rendezvous
 {
-    private RendezvousDAL $dal;
     private int $id;
     private string $description;
     private string $date;
@@ -53,16 +52,6 @@ class Rendezvous
         return $this->user_id;
     }
 
-    public function setId(int $id)
-    {
-        $this->id = $id;
-    }
-
-    public function setUserId(int $user_id)
-    {
-        $this->user_id = $user_id;
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -73,10 +62,6 @@ class Rendezvous
         return $this->description;
     }
 
-
-    public function getTimezone()
-    {
-        return $this->timezone;
-    }
 }
+
 ?>

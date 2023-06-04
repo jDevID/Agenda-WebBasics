@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    console.log("liste asynchrone rendez-vous -> HTTP status : " + xhr.status);
+                    //console.log("liste asynchrone rendez-vous -> HTTP status : " + xhr.status);
                     // console.log("Response headers -> " + xhr.getAllResponseHeaders());
                     // console.log("Response text -> " + xhr.responseText);
                     if (xhr.responseXML !== null) {
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             tr_rdv.addEventListener('click', function (event) {
                 let currentRendezvousId = id;
-                console.log(id);
+                //console.log(id);
                 if (selectedRendezvous && selectedRendezvous !== this) {
                     selectedRendezvous.style.backgroundColor = '';
                     selectedRendezvous.classList.remove("selected");
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    // Click outside to deselect
+    // Click vide pour déselectionner
     document.addEventListener('click', function (event) {
         let isInsideTable = event.target.closest('tr');
         if (!isInsideTable && selectedRendezvous) {

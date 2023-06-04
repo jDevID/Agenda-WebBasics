@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    console.log("Liste asynchrone client -> HTTP status : " + xhr.status);
+                    //console.log("Liste asynchrone client -> HTTP status : " + xhr.status);
                     if (xhr.responseXML !== null) {
                         manageClientXMLResponse(xhr.responseXML);
                     } else {
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             let responseMessage = JSON.parse(xhr.responseText).message;
 
                             if (xhr.status === 200) {
-                                showToast(responseMessage, 'success');
+                                showToast(responseMessage, 'info');
                             } else {
                                 showToast(responseMessage, 'error');
                             }

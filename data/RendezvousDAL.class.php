@@ -1,7 +1,5 @@
 <?php
-require_once '../data/DAL.class.php';
-require_once '../models/Rendezvous.class.php';
-require_once '../models/Conge.class.php';
+require_once '../models/init.php';
 
 
 class RendezvousDAL extends DAL

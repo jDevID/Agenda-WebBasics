@@ -15,19 +15,19 @@
 </head>
 <body>
 
-        <?php
-        /*  *   *   *  VIEW - MAIN   *   *   *
-         * Toast, affichage des listes, load
-         *  des scripts js et fichiers php
-         *  Base de l'Application.
-         */
+<?php
+/*  *   *   *  VIEW - MAIN   *   *   *
+ * Toast, affichage des listes, load
+ *  des scripts js et fichiers php
+ *  Base de l'Application.
+ */
 
-        require_once('../models/init.php');
+require_once('../models/init.php');
 
-        /*  *   *   DEBUG */
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+/*  *   *   DEBUG */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 
         /*  *  *   *   SESSION     *    *   *   */
