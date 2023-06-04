@@ -1,43 +1,24 @@
-# mysql -u root -p < dml.sql
-# Data Manipulation Language
-
-USE DavidBotton;
-
--- CONNECT WITH
--- username = abc
--- password = abc
--- OR REGISTER AN ACCOUNT
-INSERT INTO users (username, password)
-VALUES ('abc', '$2y$10$eULLEYT58mRfJa61jhczSOtjeTsEV59JceBEfuCJanx0HGGWkKRQa');
--- abc -> blowfish cipher (hashing) = $2y$10$eULLEYT58mRfJa61jhczSOtjeTsEV59JceBEfuCJanx0HGGWkKRQa
-
-INSERT INTO client (id, name, email)
-VALUES (1, 'John Smith', 'john@example.com'),
-       (2, 'Jane Doe', 'jane@example.com'),
-       (3, 'David Johnson', 'david@example.com'),
-       (4, 'Emily Wilson', 'emily@example.com'),
-       (5, 'Michael Brown', 'michael@example.com'),
-       (6, 'Olivia Davis', 'olivia@example.com'),
-       (7, 'Daniel Martinez', 'daniel@example.com'),
-       (8, 'Sophia Anderson', 'sophia@example.com');
-
-INSERT INTO rendezvous (user_id, client_id, name, description, date, start_hour, end_hour)
-VALUES (1, 1, 'John Smith', 'Discuss project details', '2023-06-16', '09:00:00', '10:00:00'),
-       (1, 2, 'Jane Doe', 'Review marketing strategy', '2023-06-20', '09:00:00', '10:00:00'),
-       (1, 3, 'David Johnson', 'Provide software demo', '2023-06-22', '09:00:00', '10:00:00'),
-       (1, 4, 'Emily Wilson', 'Discuss budget allocation', '2023-05-25', '09:00:00', '10:00:00'),
-       (1, 5, 'Michael Brown', 'Finalize partnership agreement', '2023-05-26', '09:00:00', '10:00:00'),
-       (1, 6, 'Olivia Davis', 'Brainstorm new ideas', '2023-05-29', '09:00:00', '10:00:00'),
-       (1, 7, 'Daniel Martinez', 'Present sales report', '2023-06-05', '09:00:00', '10:00:00'),
-       (1, 8, 'Sophia Anderson', 'Discuss HR policies', '2023-06-10', '09:00:00', '10:00:00'),
-       (1, 1, 'John Smith', 'Review project progress', '2023-06-20', '10:00:00', '11:00:00'),
-       (1, 2, 'Jane Doe', 'Discuss upcoming events', '2023-06-25', '09:00:00', '10:00:00');
+-- tous les mdp sont : Dupontelle4000
+INSERT INTO users (username, password, role)
+VALUES ('Dupontelle', '$2y$10$L.L4ELm41LLpz3JKe44GtuERl.asjUUloFubDhBsOjOkDGImqpOiG', 'admin');
+INSERT INTO users (username, password, role)
+VALUES ('Xavier Cha', '$2y$10$L.L4ELm41LLpz3JKe44GtuERl.asjUUloFubDhBsOjOkDGImqpOiG', 'client');
+INSERT INTO users (username, password, role)
+VALUES ('Billy Bo', '$2y$10$L.L4ELm41LLpz3JKe44GtuERl.asjUUloFubDhBsOjOkDGImqpOiG', 'client');
+INSERT INTO users (username, password, role)
+VALUES ('Karine Jo', '$2y$10$L.L4ELm41LLpz3JKe44GtuERl.asjUUloFubDhBsOjOkDGImqpOiG', 'client');
 
 INSERT INTO conge (date)
-VALUES ('2023-06-17'),
+VALUES ('2023-06-03'),
+       ('2023-06-04'),
+       ('2023-06-10'),
+       ('2023-06-11'),
+       ('2023-06-17'),
        ('2023-06-18'),
-       ('2023-06-19'),
-       ('2023-06-21'),
-       ('2023-06-23'),
-       ('2023-05-24');
+       ('2023-06-24'),
+       ('2023-06-25');
 
+INSERT INTO rendezvous (user_id, description, date, start_hour, end_hour)
+VALUES (3, 'Billy Bo  s\'est blessé au ski en tombant ', '2023-06-05', '09:00:00', '10:00:00'),
+       (3, 'Billy Bo  s\'est blessé au ski en tombant le retour', '2023-06-12', '14:00:00', '15:00:00'),
+       (4, 'Première visite au centre Jo K.', '2023-06-19', '16:00:00', '17:00:00');
