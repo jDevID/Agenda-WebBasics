@@ -42,13 +42,75 @@ function validatePassword(password) {
     }
 }
 
+
+function validateDescription(description) {
+
+    if (/[<>=\/\\]/.test(description.value)) {
+        description.setCustomValidity('La description ne peut pas contenir les symboles suivants: <, >, =, /, \\.');
+        showToast('La description ne peut pas contenir les symboles suivants: <, >, =, /, \\.', 'info');
+    } else if (description.value.length > 300) {
+        description.setCustomValidity('La longueur de la description doit être comprise entre 20 et 300 caractères.');
+        showToast('La longueur de la description doit être comprise entre 20 et 300 caractères.', 'info');
+
+
+    } else {
+        description.setCustomValidity('');
+    }
+}
+function parseDate(input) {
+    let parts = input.split('-');
+    return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
+function validateDate(date) {
+    let currentDate = new Date();
+    let inputDate = parseDate(date.value);
+    if (inputDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
+        date.setCustomValidity('La date ne peut pas être dans le passé.');
+        showToast('La date ne peut pas être dans le passé.', 'info');
+    } else {
+        date.setCustomValidity('');
+    }
+}
+
+function convertTimeToMinutes(timeStr) {
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return (hours * 60) + minutes;
+}
+
+function validateTime(time, minHour = '06:00', maxHour = '22:00') {
+    const timeInMinutes = convertTimeToMinutes(time.value);
+    const minHourInMinutes = convertTimeToMinutes(minHour);
+    const maxHourInMinutes = convertTimeToMinutes(maxHour);
+
+    if (timeInMinutes < minHourInMinutes || timeInMinutes > maxHourInMinutes) {
+        time.setCustomValidity(`L'heure doit être comprise entre ${minHour} et ${maxHour}.`);
+        showToast(`L'heure doit être comprise entre ${minHour} et ${maxHour}.`, 'info');
+    } else {
+        time.setCustomValidity('');
+    }
+}
+
 window.addEventListener('load', function () {
     let form = document.querySelector('form');
 
     let username = document.getElementById('username');
-    let password = document.getElementById('password');
+    let usernameUpt = document.getElementById('usernameUpdate');
 
-    // Check validity on input
+    let password = document.getElementById('password');
+    let passwordUpt = document.getElementById('passwordUpdate');
+
+    let description = document.getElementById('description');
+    let descriptionUpt = document.getElementById('descriptionUpdate');
+
+    let date = document.getElementById('date');
+    let new_date = document.getElementById('new_date');
+
+    let start_hour = document.getElementById('start_hour');
+    let end_hour = document.getElementById('end_hour');
+
+    let start_hourUpt = document.getElementById('start_hourUpdate');
+    let end_hourUpt = document.getElementById('end_hourUpdate');
     username.addEventListener('input', function () {
         validateUsername(username);
     });
@@ -57,12 +119,59 @@ window.addEventListener('load', function () {
         validatePassword(password);
     });
 
-    // Check validity on submit
+    description.addEventListener('input', function () {
+        validateDescription(description);
+    });
+
+    date.addEventListener('input', function () {
+        validateDate(date);
+    });
+
+    start_hour.addEventListener('input', function () {
+        validateTime(start_hour);
+    });
+
+    end_hour.addEventListener('input', function () {
+        validateTime(end_hour);
+    });
+
+    usernameUpt.addEventListener('input', function () {
+        validateUsername(usernameUpt);
+    });
+
+    descriptionUpt.addEventListener('input', function () {
+        validateDescription(descriptionUpt);
+    });
+
+    new_date.addEventListener('input', function () {
+        validateDate(new_date);
+    });
+
+    start_hourUpt.addEventListener('input', function () {
+        validateTime(start_hourUpt);
+    });
+
+    end_hourUpt.addEventListener('input', function () {
+        validateTime(end_hourUpt);
+    });
+    end_hour.addEventListener('input', function () {
+        validateTime(end_hourUpt);
+    });
+
     form.addEventListener('submit', function (event) {
         validateUsername(username);
         validatePassword(password);
+        validateDescription(description);
+        validateDate(date);
+        validateTime(start_hour);
+        validateTime(end_hour);
+         validateDescription(descriptionUpt);
+        validateDate(new_date);
+        validateTime(start_hourUpt);
+        validateTime(end_hourUpt);
 
-        if (!username.validity.valid || !password.validity.valid) {
+        if (!username.validity.valid || !password.validity.valid || !description.validity.valid ||
+            !date.validity.valid || !start_hour.validity.valid || !end_hour.validity.valid ) {
             event.preventDefault();
         }
     });
