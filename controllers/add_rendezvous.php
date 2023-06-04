@@ -10,18 +10,18 @@ ob_start(); // Buffering on
 require_once '../models/init.php';
 require_once '../models/RendezvousFactory.php';
 
-/*  *   *   DEBUG
- * ini_set('display_errors', 1);
- * ini_set('display_startup_errors', 1);
- * error_reporting(E_ALL);
- */
+
+ ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+
 
 /*  *  *   *   SESSION     *    *   *   */
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['username'])) {
-    header('Location:login.php');
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+    header('Location: ../views/login_view.php');
     exit();
 }
 

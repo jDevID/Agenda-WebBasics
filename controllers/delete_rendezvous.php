@@ -20,8 +20,8 @@ require_once '../models/RendezvousFactory.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['username'])) {
-    header('Location:login.php');
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+    header('Location: ../views/login_view.php');
     exit();
 }
 
@@ -29,6 +29,13 @@ if (!isset($_SESSION['username'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
+
+        /*  *  *   *   PERMISSION    *    *   *   */
+        if ($_SESSION['role'] === 'client'){
+            echo json_encode(['message' => 'Vous n\'avez pas cette permission.']);
+            http_response_code(403);
+            exit;
+        }
 
         /*  *  *   *   DEPENDANCES   *    *   *   */
         $rendezvousDAL = new RendezvousDAL();

@@ -20,8 +20,8 @@ require_once('../models/UserFactory.php');
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['username'])) {
-    header('Location:login.php');
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+    header('Location: ../views/login_view.php');
     exit();
 }
 
@@ -30,7 +30,14 @@ $userDAL = new UserDAL();
 $userFactory = new UserFactory($userDAL);
 
 /*  *  *   *   ACTION    *    *   *   */
-$clients = $userDAL->getAllUsers();
+if ($_SESSION['role'] === 'admin'){
+    $clients = $userDAL->getAllUsers();
+
+} else {
+
+    /*  *  *   *   PERMISSION    *    *   *   */
+    $clients = $userDAL->getAllAdmin();
+}
 
 ob_clean(); // Buffer clear
 
@@ -49,6 +56,7 @@ foreach ($clients as $client) {
         echo '<client>';
         echo "  <id>$id</id>";
         echo "  <username>$name</username>";
+        echo "  <role>" . $client->getRole() . "</role>";
         echo '</client>';
     }
 

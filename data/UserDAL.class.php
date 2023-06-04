@@ -97,6 +97,25 @@ class UserDAL extends DAL
         return $users;
     }
 
+
+    public function getAllAdmin(): array
+    {
+        $sql = "SELECT * FROM users WHERE role = 'admin' ORDER BY username";
+        $results = $this->fetchAll($sql);
+        $users = [];
+
+        foreach ($results as $row) {
+            $users[] = new User(
+                $row['id'],
+                $row['username'],
+                $row['password'],
+                $row['role']
+            );
+        }
+
+        return $users;
+    }
+
     /**
      * @throws Exception
      */
@@ -130,31 +149,15 @@ class UserDAL extends DAL
         $result = $this->fetch($sql, $params);
         return $result ? (int)$result['count'] : 0;
     }
-
-    public function update(User $user): bool
-    {
-        $sql = "UPDATE users SET username = :username, password = :password, role = :role WHERE id = :id";
+    public function update(User $user): bool {
         $params = [
             ':id' => $user->getId(),
             ':username' => $user->getUsername(),
-            ':password' => $user->getPassword(), // Make sure to hash the password before calling this method
             ':role' => $user->getRole(),
         ];
+        $sql = "UPDATE users SET username = :username, role = :role WHERE id = :id";
 
         return $this->executeQuery($sql, $params);
-    }
-
-    public function hasRendezvousInFutureById(int $userId): bool
-    {
-        $currentDate = new DateTime('now');
-        $currentDateStr = $currentDate->format('Y-m-d');
-
-        $sql = "SELECT COUNT(*) as count FROM rendezvous 
-            WHERE user_id = :user_id AND date > :current_date";
-        $params = [':user_id' => $userId, ':current_date' => $currentDateStr];
-
-        $result = $this->fetch($sql, $params);
-        return $result && $result['count'] > 0;
     }
 
     public function delete(int $id): bool
@@ -182,7 +185,6 @@ class UserDAL extends DAL
             $stmt->execute($params);
             return $stmt;
         } catch (PDOException $e) {
-            // handle exception here, e.g., by logging it and re-throwing
             throw $e;
         }
     }

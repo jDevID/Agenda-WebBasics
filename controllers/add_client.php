@@ -20,8 +20,8 @@ require_once '../models/UserFactory.php';
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['username'])) {
-    header('Location:login.php');
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
+    header('Location: ../views/login_view.php');
     exit();
 }
 
@@ -37,7 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     /*  *  *   *   HANDLING    *    *   *   */
     try {
-        $user = $userFactory->createUser(-1, $username, $password, $role);
+
+        /*  *  *   *   PERMISSION    *    *   *   */
+        if ($_SESSION['role'] === 'client') {
+            Toast::throwMessage('Vous n\'avez pas cette permission.', 'error');
+            header('Location: ../views/main_view.php');
+            exit;
+
+        }
+        $user = $userFactory->createUser(-1, $username, $password, $role, false, true);
 
         if ($userDAL->register($user)) {
 
