@@ -33,7 +33,9 @@ class RendezvousFactory
         if ($checkAvailability && !$dal->isTimeSlotAvailable($start_hour, $end_hour, $date, $user_id)) {
             throw new Exception('Ce créneau horaire n\'est pas disponible.');
         }
-
+        if ($this->congeDAL->checkHolidayByDate($date)) {
+            throw new Exception('You cannot set a Rendezvous on a Holiday date.');
+        }
 
         if (strtotime($date . ' ' . $start_hour) >= strtotime($date . ' ' . $end_hour)) {
             throw new Exception('L\'heure de départ ne peut être égal ou supérieur à l\'heure de fin.');
